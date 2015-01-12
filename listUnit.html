@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+<link type="text/css" rel="stylesheet" href="paper.css" />
+<script src="jquery.js"></script>
+</head>
+<body>
+<div class="wrap go">
+  <div class="_loading _bar">
+    <div class="blue"></div>
+    <div class="yellow"></div>
+    <div class="green"></div>
+    <div class="red"></div>
+  </div>
+</div>
+<div class="container">
+<div id="here">
+
+</div>
+<h3 id="footer">
+    Data loaded from commit <span class="commit"></span> on 
+    <a href="https://github.com/Deathmax/bravefrontier_data">https://github.com/Deathmax/bravefrontier_data</a>
+</h3>
+</div>
+</body>
+
+<script type="text/javascript">
+_url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/evo_list.json";
+var commits;
+$.ajaxSetup({ async: false });
+try{
+    $.getJSON('https://api.github.com/repos/Deathmax/bravefrontier_data/commits'
+          , function(data) {
+    $(".commit", "#footer").html(data[0]['sha']);
+    _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + data[0]['sha'] + "/evo_list.json";
+    commits = data;
+});
+}catch(e){    
+    _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/evo_list.json?e";
+}
+$.ajaxSetup({ async: true });
+
+var curData;
+var lastData;
+$.getJSON(_url , function(data) {
+    _d = data;
+	var here = "";
+	$.each(_d, function(k, v) {
+        if (this.rarity > 3){
+		var d = this;
+			here += here == "" ? "{" : "," +  "\"" + _d + "\"";
+	});
+
+	$("#here").html(here + "}");
+});
+
+</script>
+</html>
+
