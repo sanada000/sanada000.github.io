@@ -40,21 +40,43 @@ try{
 }catch(e){    
     _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/evo_list.json?e";
 }
-$.ajaxSetup({ async: true });
 
-var curData;
-var lastData;
-$.getJSON(_url , function(data) {
-    _d = data;
-	var here = "";
-	$.each(_d, function(k, v) {
-        if (this.rarity > 3){
-		var d = this;
-			here += here == "" ? "{" : "," +  "\"" + _d + "\"";
-	});
+var curData=[];
+var lastData=[];
+var diff;
+var count=0;
+var here = "";
 
-	$("#here").html(here + "}");
+do{
+curData=[];
+lastData=[];
+$.getJSON("https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + commits[count++]['sha'] + "/evo_list.json" , function(data) { 
+	$.each(data, function(k, v) {
+		curData.push(data[k]["evo"]["id"]);
+	});	
 });
+$.getJSON("https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + commits[count]['sha'] + "/evo_list.json" , function(data) { 
+	$.each(data, function(k, v) {
+		lastData.push(data[k]["evo"]["id"]);
+	});	
+});
+diff = $.grep(curData, function(value) { return $.inArray(value, lastData) < 0; });
+console.log(count + " " + curData.length + "-" + lastData.length );
+
+
+if (diff.length > 0) {
+var tmp = "";
+for(i=0;i<diff.length;i++){
+	//tmp += (tmp === "" ? "{" : "," )+  "\"" + diff[i] + "\"";
+	tmp += (tmp === "" ? "" : "|" ) + diff[i];
+}
+//here += tmp  + "}<br />";
+here += (here === "" ? "" : "|" ) + tmp ;
+}
+
+}while(count < (commits.length - 1));
+$("#here").html("<a href='http://sanada000.github.io?q=" + here + "'>" + here + "</a>");
+
 
 </script>
 </html>
