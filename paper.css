@@ -98,6 +98,7 @@ h3 span[phase='0']:before {
   content: "B";
   color: #fff;
   background: #aaf;
+  display:none;
 }
 h3 span[phase='1']:before {
   content: "\2020";
@@ -775,6 +776,12 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
 /*---Color Rule */
 
 /*---Loader---*/
+#loading-tag{
+float:right; line-height:1em; margin-top:10px;
+}
+#loading-tag:before{
+content:'#';
+}
 .red { background-color: #D50F25 }
 .yellow { background-color: #EEB211 }
 .green { background-color: #009925 } /* or 009939? */
@@ -1003,7 +1010,14 @@ h1{font-size: 20px;}
     width: 100%;
     clear:both;
     margin: 0;
-    box-shadow: 0;
+    box-shadow: none;
+	display:block;
+	border-bottom: 1px solid #ccc;
+}.xlowBorder>.xlowBorder.unit:last-child{
+	border-bottom: none;
+}
+.xlowBorder>.xlowBorder .lowBorder.name{
+	display:block;
 }
 .lowBorder.unit:after {display:block; clear:both; content:''; }
 table.hiRes {display:table;}
