@@ -927,7 +927,53 @@ content:'#';
 .xlowBorder>.xlowBorder .section{padding-bottom:30px;}
 .xlowBorder>.xlowBorder.detailed .section{padding-bottom:0;}
 
+.xlowBorder>.xlowBorder.unit{
+    width: 100%;
+    clear:both;
+    margin: 0;
+    box-shadow: none;
+	display:block;
+	border-bottom: 1px solid #ccc;
+}
+.xlowBorder>.xlowBorder.unit:last-child{
+	border-bottom: none;
+}
 
+.xlowBorder>.xlowBorder .lowBorder.name{
+	display:block;
+}
+.xlowBorder>.xlowBorder>.evo{
+	display:block;
+	float:right;
+	margin-bottom: -20px;
+    margin-top: -38px;
+	margin-right:20px;
+	border-bottom:none;
+}
+.xlowBorder>.xlowBorder>.evo ._icon{
+	width:40px;
+	height: 40px;
+	margin: 5px 5px 5px 0;
+}
+.xlowBorder>.xlowBorder>.evo h2{
+	display:none;
+}
+.xlowBorder>.xlowBorder.detailed>.evo{
+	display:block;
+	clear:both;
+	margin-bottom: 0px;
+    margin-top: -1px;
+	width: 100%;	
+	margin-right:0;
+	border-bottom:1px solid #ccc;
+}
+.xlowBorder>.xlowBorder.detailed>.evo h2{
+	display:block;
+}
+.xlowBorder>.xlowBorder.detailed>.evo ._icon{
+	width:50px;
+	height: 50px;
+}
 
 .fire ._icon.loaded:after { border-color: #b71c1c; }
 .water ._icon.loaded:after { border-color: #1565c0; }
@@ -1008,51 +1054,8 @@ h1{font-size: 20px;}
     float:left;
     margin: 10px 1.666666%;
 }
-.xlowBorder>.xlowBorder>.evo{
-	display:block;
-	float:right;
-	margin-bottom: -20px;
-    margin-top: -38px;
-	margin-right:20px;
-	border-bottom:none;
-}
-.xlowBorder>.xlowBorder>.evo ._icon{
-	width:40px;
-	height: 40px;
-	margin: 5px 5px 5px 0;
-}
-.xlowBorder>.xlowBorder>.evo h2{
-	display:none;
-}
-.xlowBorder>.xlowBorder.detailed>.evo{
-	display:block;
-	clear:both;
-	margin-bottom: 0px;
-    margin-top: -1px;
-	width: 100%;	
-	margin-right:0;
-	border-bottom:1px solid #ccc;
-}
-.xlowBorder>.xlowBorder.detailed>.evo h2{
-	display:block;
-}
-.xlowBorder>.xlowBorder.detailed>.evo ._icon{
-	width:50px;
-	height: 50px;
-}
-.xlowBorder>.xlowBorder.unit{
-    width: 100%;
-    clear:both;
-    margin: 0;
-    box-shadow: none;
-	display:block;
-	border-bottom: 1px solid #ccc;
-}.xlowBorder>.xlowBorder.unit:last-child{
-	border-bottom: none;
-}
-.xlowBorder>.xlowBorder .lowBorder.name{
-	display:block;
-}
+
+
 .lowBorder.unit:after {display:block; clear:both; content:''; }
 table.hiRes {display:table;}
 table.smallRes {display:none;}

@@ -1055,7 +1055,7 @@ function advSearch() {
 		}	
 	 });
      rapikan();
-     var sites = "https://716a6e5661fdc416c2cf19beb7f5f8f7e97f2d33.googledrive.com/host/0B7vqm2NtJxe1SmFQakN5UHEyZEE/paper2.html?p=";
+     var sites = "http://sanada000.github.io?p=";
      $("#link").html("<a href='"+sites + encodeURI($("#prop").val().toLowerCase())+"'>get link</a>");
     }
     
@@ -1078,7 +1078,7 @@ function filters() {
 		}	
 	 });
      rapikan();
-     var sites = "https://716a6e5661fdc416c2cf19beb7f5f8f7e97f2d33.googledrive.com/host/0B7vqm2NtJxe1SmFQakN5UHEyZEE/paper2.html?q="
+     var sites = "http://sanada000.github.io?q="
      $("#link").html("<a href='"+sites + encodeURI($("#txt").val().toLowerCase())+"'>get link</a>");
 }
 function loadPic(id){
@@ -1128,10 +1128,10 @@ function sort(_attr) {
       var contentB =parseInt( $(b).attr(_attr));
       return (contentA > contentB) ? -1 : (contentA < contentB) ? 1 : 0;
    }).appendTo("#here");
-    var sites = "https://716a6e5661fdc416c2cf19beb7f5f8f7e97f2d33.googledrive.com/host/0B7vqm2NtJxe1SmFQakN5UHEyZEE/paper2.html?q=";
+    var sites = "http://sanada000.github.io?q=";
     sites += encodeURI($("#txt").val().toLowerCase());
     if ($("#prop").val() !== ""){
-        sites = "https://716a6e5661fdc416c2cf19beb7f5f8f7e97f2d33.googledrive.com/host/0B7vqm2NtJxe1SmFQakN5UHEyZEE/paper2.html?p=";
+        sites = "http://sanada000.github.io?p=";
         sites += encodeURI($("#prop").val().toLowerCase());
     }
     $("#link").html("<a href='"+sites + "&s=" + _attr+"'>get link</a>");
