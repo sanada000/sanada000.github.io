@@ -33,6 +33,14 @@
       <span class="bar"></span>
       <label class="info" tooltip="LS:atk|BB:atk% buff|5*">Search by property</label>
     </div>
+	<div class="group">    
+        <input type="checkbox" class="cb" id="cb2">        
+        <label class="cb" for="cb2">
+            <span class="check"></span>
+            <span class="circle"></span>
+            Group by Evolution
+        </label>  
+    </div>
   </form>
     <div style="clear:both">&nbsp;</div>
   <small style="text-align:right" id="link" ></small><br />
@@ -114,7 +122,7 @@ $.getJSON(_url , function(data) {
 	});
 
 	$("#here").html(here);	
-	$("#loading-tag").html("Reading additional data");
+	$("#loading-tag").html("Parsing data...");
     rapikan();
     myVar = setInterval(function(){ checkLoad() }, 1000);
 });
@@ -122,7 +130,16 @@ var lastDone = 0;
 function checkLoad(){
     if (lastDone==doneNum && lastDone > 0){
         clearInterval(myVar);
-        setListener();    
+        setListener();  
+		$(".wrap.go").attr("style", "display:none;");
+    }else{
+        lastDone = doneNum;
+    }
+}
+function checkLoad2(){
+    if (lastDone==doneNum && lastDone > 0){
+        clearInterval(myVar);
+		$(".wrap.go").attr("style", "display:none;");
     }else{
         lastDone = doneNum;
     }
@@ -157,7 +174,7 @@ function setListener(){
                     $(".banner", related).addClass('loaded'); 
                     related.removeClass("loading");
                     related.addClass("detailed");
-                    setTimeout("rapikan()",500);
+                    //setTimeout("rapikan()",500);
                 }); 
             }
          }
@@ -180,13 +197,20 @@ function setListener(){
                     icon.addClass("loaded");
                     related.removeClass("loading"); 
 					loadPic(icon.attr("id"));
+					setTimeout(function() { insertMaterial(related.attr("gid")); }, 0);
                     }
                 });   
             }
         });
 		getEvolist();
-        mount();		
-        $(".wrap.go").attr("style", "display:none;");
+        mount();	
+		$("#cb2").prop('checked', false);		
+		jQuery('#cb2').on('click', function() {
+			if ($("#cb2:checked").length > 0)
+				setTimeout ( "groupByEvo()", 500 );     
+			else
+				setTimeout ( "sort(\"hit\")", 500 ); 
+		});        
 }
 function writeData(d, cls, k){
         var here="";
@@ -281,9 +305,10 @@ function writeData(d, cls, k){
             return;
             }
         here+=local;
+		here +="<div class='lowBorder evo'> </div>";
         try {
             here +=countAI(d["ai"]);
-        }catch(e){}
+        }catch(e){}		
 		try { //try parsing arena AI
 		local = "<div class='lowBorder hide'><h2>Arena AI</h2>";
 		local += "<table class='dempet bb'><tr>";
@@ -541,7 +566,11 @@ function readLeader(d) {
                         }else
                             here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
                             //here += (here === "" ? "" : ", ") + m + " " + d[k][l][m];
-                    
+                    }else if (m.indexOf('based on hp') >= 0 && d[k][l]["buff proportional to hp"] !== undefined && d[k][l][m.replace("extra buff based on hp", "base buff")] !== undefined) {
+						here = smartStringJoin(here, d[k][l][m.replace("extra buff based on hp", "base buff")] + "% to " 
+									+ d[k][l][m] + "% " + m.replace("% extra buff","") + " " + d[k][l]["buff proportional to hp"]);
+					}else if (m === "buff proportional to hp" ){
+					}else if (m.indexOf('base buff') >= 0 && d[k][l][m.replace("base buff" ,"extra buff based on hp")] !== undefined){
                     }else if (m.indexOf('dmg% to hp% when attacked') >= 0){
                             if (m == "dmg% to hp% when attacked chance%"){
                             var _rst = "";
@@ -697,10 +726,10 @@ function readExclude(d,l,list,k){
             }
             if (m.indexOf("turns") >=0){
                 if (d[0]["effects"][l][m.replace(" turns"," high")] !== undefined){
-                }else if (d[0]["effects"][l][m.replace(" turns","")] !== undefined)
+                }else if (m === "buff turns")
                     turn = tellIt(" ", d,l,m, " turns ");
                 else //if(m.indexOf("buff") >= 0 || '% converted turns,resist status ails turns, bc fill when attacked turns (38)'.indexOf(m) >= 0)
-                    turn = tellIt(" ", d,l,m, " turns ");
+                    turn = smartStringJoin(turn, tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
                 /*else if(m.indexOf('dmg% reduction turns') >= 0)
                     turn = tellIt(" ", d,l,m, m.replace("dmg% reduction ",""));
                 else
@@ -779,7 +808,7 @@ function readExclude(d,l,list,k){
         }
     }
     if (turn + target !== "" ) {
-        here = prolog + here + turn + target;
+        here = prolog + here + (prolog + here === "" ? "" : " on ") + turn + target;
         target = "";
         turn = "";
         prolog = "";
@@ -943,10 +972,8 @@ function getEvolist(){
 	$("#loading-tag").html("Loading evo material");
     _e = data;
 	var i=0;
-	$(".xlowBorder.unit").each(function(d){
-		var gid = $(this).attr("gid");
 		//setTimeout(function() { insertMaterial(gid); }, i++);
-	});
+
 	$("#loading-tag").html("Loading finished");
 	});
 }
@@ -956,20 +983,26 @@ function insertMaterial(gid){
 		$.each(_e[gid]["mats"], function(k, v) {
 		  here += "<div class='_icon' style=\"background-image: url('https://97e5ea6e714e0cf2633c01f7a3ab8eee00a8eb35.googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/icon" + _d[this["id"]]["guide_id"] + ".png')\"></div>";
 		}); 
-		$(".xlowBorder.unit." + gid + " > div:nth-child(2)").after("<div class='lowBorder'><h2>Evo Material</h2>" + here + "<div style='clear:both;margin-bottom:10px;' /></div>");
+		$(".xlowBorder.unit." + gid + " > div.evo").html("<h2>Evo Material</h2>" + here + "<div style='clear:both; margin-bottom:5px;'></div>");
 
 	  }catch(e){}
-	  doneNum++;
+	  //doneNum++;
 }
 function groupByEvo(){
+	doneNum = 0;
+	lastDone = 0;
+	myVar = setInterval(function(){ checkLoad2() }, 1000);
+	$(".wrap.go").attr("style", "display:block;");
+	$("#loading-tag").html("Grouping Unit ...");
     $.each(_e, function(k, v) {
-        if (this["rarity"] > 3){
+        if (this["rarity"] > 3){		
 			setTimeout(function() {
-				$(".unit." + this["evo"]["id"]).append($(".unit." + k));			
+				$("#loading-tag").html("Grouping Unit " + k);
+				$(".unit." + _e[k]["evo"]["id"]).append($(".unit." + k));			
 				$(".xlowBorder", $(".unit." + k)).each(function() {
 					$(".unit." + _e[k]["evo"]["id"]).append($(this));			
 				});
-			},0);
+			},doneNum++*10);
         }
 	});
 }
@@ -1089,7 +1122,7 @@ function mount() {
     }
 }
 function sort(_attr) {
-
+	$("#cb2").prop('checked', false);
     $(".unit").sort(function (a, b) {
       var contentA =parseInt( $(a).attr(_attr));
       var contentB =parseInt( $(b).attr(_attr));
