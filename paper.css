@@ -258,6 +258,7 @@ table.bb td:first-child { display:block; }
 
 /* form starting stylings ------------------------------- */
 .group 			  { 
+	margin-top: 20px;
   position:relative; 
   margin-bottom:20px; 
 }
@@ -783,6 +784,7 @@ float:right; line-height:1em; margin-top:10px;
 }
 #loading-tag:before{
 content:'#';
+background: #fff;
 }
 .red { background-color: #D50F25 }
 .yellow { background-color: #EEB211 }
