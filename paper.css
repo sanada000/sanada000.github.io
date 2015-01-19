@@ -104,6 +104,7 @@ h3 span[phase='0']:before {
 h3 span[phase='1']:before {
   content: "\2020";
   transform: rotate(210deg);
+  -webkit-transform: rotate(210deg);
   line-height:1.6em;
 }
 h3 span[phase='2'] {
@@ -256,6 +257,18 @@ table.bb td:first-child { display:block; }
     font-size: 12px;
 }
 
+.topLabel:before {
+    content: "Damage Ratio";
+    font-size: 0.7em;
+    position: absolute;
+    top: -0.8em;
+    white-space: nowrap;
+}
+.topLabel {
+    font-size: 0.7em;
+    opacity: 0.5;
+    position: relative;
+}
 /* form starting stylings ------------------------------- */
 .group 			  { 
 	margin-top: 20px;
@@ -513,7 +526,7 @@ img.unitGif[src]~.stay-bottom{margin-left:150px;}
   border-right: none;
   border-bottom: none;
   transform: rotate(225deg);
-  -webkit-transform: rotate(225deg);
+  -webkit-transform: (225deg);
   transition: all 0.2s;
   margin-left: 95%;
   margin-top: -25px;
@@ -584,6 +597,7 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
 .detailed .reverse-hide {
   display:none;
   transition: all 0.4s ease-in; 
+  -webkit-transition: all 0.4s ease-in; 
 }
 .detailed tr.hide {
   display: table-row;
@@ -601,6 +615,7 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
   content: ' ';
   opacity: 0;
   transition:all 0.2s;
+  -webkit-transition:all 0.2s;
 }
 .water ._icon .loader { border-color: #009; }
 .earth ._icon .loader { border-color: #090; }
@@ -635,6 +650,7 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
   position:absolute;
   animation-delay:0.2s;
   animation: hilang 1.8s;
+  -webkit-animation-delay:0.2s;
   -webkit-animation: hilang 1.8s;
 }
 .rarity{background:#ffd600;
@@ -650,13 +666,13 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
     border:3px solid #fff;
     position: absolute;}
 @keyframes loading{
-  0%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg); -webkit-transform: rotate(0deg);}
   30%{ width:12px; 
   margin-left:19px;}
-  100%{ transform: rotate(360deg);}
+  100%{ transform: rotate(360deg); -webkit-transform: rotate(360deg);}
 }
 @-webkit-keyframes loading{
-  0%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg); -webkit-transform: rotate(0deg);}
   30%{ width:12px; 
   margin-left:19px;}
   100%{ transform: rotate(360deg);-webkit-transform: rotate(360deg);}
@@ -781,10 +797,10 @@ table.firstcol-hide tr:last-child td{font-size:0.6em; line-height: 10px; color:#
 /*---Loader---*/
 #loading-tag{
 float:right; line-height:1em; margin-top:10px;
+background: #fff;
 }
 #loading-tag:before{
 content:'#';
-background: #fff;
 }
 .red { background-color: #D50F25 }
 .yellow { background-color: #EEB211 }
@@ -909,11 +925,13 @@ background: #fff;
   left:10px;
   position:absolute;
   transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
   border-radius: 50px;
 }
 .section:hover~.close, .close:hover{  
   opacity:0.5;
   transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
   box-shadow:1px 0 2px #777;
 }
 .close:hover{ 

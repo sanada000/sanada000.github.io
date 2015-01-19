@@ -726,10 +726,10 @@ function readExclude(d,l,list,k){
             }
             if (m.indexOf("turns") >=0){
                 if (d[0]["effects"][l][m.replace(" turns"," high")] !== undefined){
-                }else if (m === "buff turns")
-                    turn = tellIt(" ", d,l,m, " turns ");
+                }else if (m.indexOf("taunt") >= 0 || m.indexOf("stealth") >= 0)
+                    turn = smartStringJoin(turn, " on " + tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
                 else //if(m.indexOf("buff") >= 0 || '% converted turns,resist status ails turns, bc fill when attacked turns (38)'.indexOf(m) >= 0)
-                    turn = smartStringJoin(turn, tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
+                    turn = tellIt(" ", d,l,m, " turns ");
                 /*else if(m.indexOf('dmg% reduction turns') >= 0)
                     turn = tellIt(" ", d,l,m, m.replace("dmg% reduction ",""));
                 else
@@ -808,7 +808,7 @@ function readExclude(d,l,list,k){
         }
     }
     if (turn + target !== "" ) {
-        here = prolog + here + (prolog + here === "" ? "" : " on ") + turn + target;
+        here = prolog + here + turn + target;
         target = "";
         turn = "";
         prolog = "";
@@ -818,18 +818,24 @@ function readExclude(d,l,list,k){
 function readBB(key, title, d){
     var here = "";    
     try{ //creating BB
-        here += "<div class='lowBorder name'><h2>" + title + " : " + d[key]["name"] + " <span class='largeInline'>cost: <b>" + parseBC(d, key) + "</b> ";
+        here += "<div class='lowBorder name'><h2>" + title + " : " + d[key]["name"];
+		var dmgRatio = "";
+		var tmp = " <span class='largeInline'>cost: <b>" + parseBC(d, key) + "</b> ";
         if (d[key]["max bc generated"] !== undefined){
-            here += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["max bc generated"] + " ";
+            tmp += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["max bc generated"] + " ";
             for (var l in d[key]["levels"][0]["effects"]){
-                if (d[key]["levels"][0]["effects"][l]["bb atk%"] !== undefined)
-                    here += parseLv(d[key]["levels"],l,"target area").toUpperCase();  
+                if (d[key]["levels"][0]["effects"][l]["bb atk%"] !== undefined){
+                    tmp += parseLv(d[key]["levels"],l,"target area").toUpperCase();
+					dmgRatio = d[key]["levels"][9]["effects"][l]["bb atk%"] / 
+						(d[key]["levels"][9]["bc cost"] + (key === "sbb" ? d["bb"]["levels"][9]["bc cost"] : 0) );
+					dmgRatio = dmgRatio > 0 ? " <small class='topLabel'>" + parseFloat(dmgRatio).toFixed(2) + "</small>" : "";
+				}					
             }
-            here += " BC </b>";
+            tmp += " BC </b> ";
         }else if (d[key]["levels"][9]["max bc generated"] !== undefined){
-            here += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["levels"][9]["max bc generated"] + " random BC </b>";
+            tmp += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["levels"][9]["max bc generated"] + " random BC </b>";
         }
-        here += "</span></h2>";
+        here += dmgRatio + tmp + "</span></h2>";
         here += "<h3>" + d[key]["desc"] + "</h3>";
 
         try{
