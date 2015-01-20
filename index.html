@@ -505,27 +505,24 @@ function tellIt(prefix, d,l,m, suffix) {
 function elementTag(here){
     return here.replace(/(fire|thunder|water|earth|dark|light){1}/g, '<$1>$1</$1>')
             .replace(/((<w)|(<f)|(<t)|(<e)|(<d)|(<l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
-            .replace(/((<\/w)|(<\/f)|(<\/t)|(<\/e)|(<\/d)|(<\/l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
-			.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"")
-			.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");    
+            .replace(/((<\/w)|(<\/f)|(<\/t)|(<\/e)|(<\/d)|(<\/l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>');            
 }
 function smartStringJoin(s1, s2){
     nonTag = s2.replace(/(\(\d*\))/g, '').replace(/(~\()|(\)~)/g,"").trim();
-	nonTag1 = s1.replace(/(\(\d*\))/g, '').replace(/(~\()|(\)~)/g,"").trim();
-    //s2 = s2.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"");
-    //s2 = s2.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");
-	var a2 = nonTag.split(" ");
+    s2 = s2.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"");
+    s2 = s2.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");
+    var a2 = nonTag.split(" ");
     if (s1.indexOf(s2) >= 0)
         return s1;
     for (var i=a2.length - 1; i>=0;i--){
       a2.splice(i,1);
-      if(nonTag1.indexOf(a2.join(" ") + " ") >= 0 && a2.join(" ").length > 1)
+      if(s1.indexOf(a2.join(" ") + " ") >= 0 && a2.join(" ").length > 1)
          break;
     }
     var a3 = nonTag.split(" ");
     for (var i=a3.length - 1; i>=0;i--){          
         a3.splice(0,1);
-        if((nonTag1+"-").indexOf((a3.join(" ")+"-")) >= 0 && a3.join(" ").length > 1)
+        if(s1.indexOf(a3.join(" ")) >= 0 && a3.join(" ").length > 1)
             break;        
     } 
     var end = a3.join(" ");
@@ -571,7 +568,7 @@ function readLeader(d) {
                             //here += (here === "" ? "" : ", ") + m + " " + d[k][l][m];
                     }else if (m.indexOf('based on hp') >= 0 && d[k][l]["buff proportional to hp"] !== undefined && d[k][l][m.replace("extra buff based on hp", "base buff")] !== undefined) {
 						here = smartStringJoin(here, d[k][l][m.replace("extra buff based on hp", "base buff")] + "% to " 
-									+ d[k][l][m] + "%&nbsp;" + m.replace("% extra buff","") + " " + d[k][l]["buff proportional to hp"]);
+									+ d[k][l][m] + "% " + m.replace("% extra buff","") + " " + d[k][l]["buff proportional to hp"]);
 					}else if (m === "buff proportional to hp" ){
 					}else if (m.indexOf('base buff') >= 0 && d[k][l][m.replace("base buff" ,"extra buff based on hp")] !== undefined){
                     }else if (m.indexOf('dmg% to hp% when attacked') >= 0){
@@ -662,7 +659,7 @@ function readLeader(d) {
                         here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("% buff", ""));
                     }else if (m.indexOf('low') >= 0){
                         if (d[k][l][m.replace("low", "high")] == undefined)
-							here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
                     }else if (m.indexOf('per turn') >= 0){
                         here = smartStringJoin(here, "+" + d[k][l][m] + " " + m.replace("per turn", "/turn"));
                     }else if (m.indexOf(' spark') >= 0){
