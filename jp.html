@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+<link type="text/css" rel="stylesheet" href="paper.css" />
+<script src="jquery.js"></script>
+<!--<script src="masonry.js"></script>-->
+</head>
+<body>
+<div class="wrap go">
+  <div class="_loading _bar">
+    <div class="blue"></div>
+    <div class="yellow"></div>
+    <div class="green"></div>
+    <div class="red"></div>
+  </div>
+  <div id="loading-tag">
+	loading...
+  </div>
+</div>
+<div class="container">
+  <form onsubmit="return false">    
+    <div class="group">      
+      <input id='txt' type="text" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="info" tooltip="dilma|Logan">Search by name</label>
+    </div>
+    <div class="group">      
+      <input id='prop' type="text" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="info" tooltip="LS:atk|BB:atk% buff|5*">Search by property</label>
+    </div>
+	<div class="group">    
+        <input type="checkbox" class="cb" id="cb2">        
+        <label class="cb" for="cb2">
+            <span class="check"></span>
+            <span class="circle"></span>
+            Group by Evolution
+        </label>  
+    </div>
+  </form>
+    <div style="clear:both">&nbsp;</div>
+  <small style="text-align:right" id="link" ></small><br />
+
+<div id="here">
+
+</div>
+<h3 id="footer">
+    Data loaded from commit <span class="commit"></span> on 
+    <a href="https://github.com/Deathmax/bravefrontier_data">https://github.com/Deathmax/bravefrontier_data</a>
+</h3>
+</div>
+</body>
+
+<script type="text/javascript">
+
+
+var stats = ["hp","atk","def","rec"];
+var statCols = ["_base","_lord","breaker","anima","guardian","oracle"];
+var ails = ["injury","weaken","curse","paralysis","poison","sick"];
+var _d,_e,commits;
+var myVar;
+var cdn = getParameterByName('cdn');
+var timeoutNum = 0;
+var doneNum = 0;
+_url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/jp/info.json";
+var sha="";
+$("#loading-tag").html("Getting last data commits");
+$.ajaxSetup({ async: false });
+try{
+    $.getJSON('https://api.github.com/repos/Deathmax/bravefrontier_data/commits'
+          , function(data) {
+	commits = data;
+    $(".commit", "#footer").html(data[0]['sha']);
+    _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + data[0]['sha'] + "/jp/info.json";
+    sha = data[0]['sha'];
+});
+}catch(e){    
+    _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/jp/info.json?e";
+}
+$.ajaxSetup({ async: true });
+if(cdn == 1)
+    _url="https://rawgit.com/Deathmax/bravefrontier_data/master/info.json";
+$.getJSON(_url , function(data) {
+	$("#loading-tag").html("Loading Units");
+    _d = data;
+    $.each(_d, function(k, v) {
+        try{ 
+            for(i=0;i<10;i++){
+                this['bb']['levels'][i]['effects'].sort( function(a,b){
+                return a["effect delay time(ms)/frame"] > b["effect delay time(ms)/frame"];
+                });  
+            }             
+            for(i=0;i<10;i++){
+                this['sbb']['levels'][i]['effects'].sort( function(a,b){
+                return a["effect delay time(ms)/frame"] > b["effect delay time(ms)/frame"];
+                });  
+            }
+        }catch(e){}
+    });
+
+	var here = "";
+    var idx = 0;
+	$.each(_d, function(k, v) {
+        idx++;
+        if (this.rarity > 3){
+		var d = this;
+        var cls = "visible";
+        var nextKey = Object.keys(data)[idx];
+        nextKey = nextKey === undefined ? '99999' : nextKey;
+        if (k.substring(0,2) !== nextKey.substring(0,2)){
+        }else {
+            cls ="";
+        }
+        if (d["leader skill"] !== undefined)
+            here += "<div class='rep " + d["guide_id"] + "'></div>";
+            setTimeout(function() {writeData(d, cls, k);}, timeoutNum++);
+        }
+	});
+
+	$("#here").html(here);	
+	$("#loading-tag").html("Parsing data...");
+    rapikan();
+    myVar = setInterval(function(){ checkLoad() }, 1000);
+});
+var lastDone = 0;
+function checkLoad(){
+    if (lastDone==doneNum && lastDone > 0){
+        clearInterval(myVar);
+        setListener();  
+		$(".wrap.go").attr("style", "display:none;");
+    }else{
+        lastDone = doneNum;
+    }
+}
+function checkLoad2(){
+    if (lastDone==doneNum && lastDone > 0){
+        clearInterval(myVar);
+		$(".wrap.go").attr("style", "display:none;");
+    }else{
+        lastDone = doneNum;
+    }
+}
+function setListener(){
+    $(".close").click( function () {
+            var related = $(this).parent();
+            related.removeClass("visible");
+        });
+        $(".xlowBorder.unit .banner").click( function () {
+            var related = $(this).parent().parent();
+         if (related.hasClass("detailed")){        
+            related.removeClass("detailed");
+            setTimeout("rapikan()",500);
+         }else {
+            if ($(".banner", related).hasClass('loaded')){
+                related.addClass("detailed");
+                setTimeout("rapikan()",500);
+            }else{            
+                related.addClass("loading");        
+                $.ajax({
+                    url:$(this).attr('img'),
+                    type:'HEAD',
+                    error:
+                        function(){
+                            related.removeClass("loading"); 
+                            related.addClass("detailed");
+                            setTimeout("rapikan()",500);
+                        }   
+                }).done(function(){
+                    $(".art", related).attr("src", $(".banner", related).attr("img"));
+                    $(".banner", related).addClass('loaded'); 
+                    related.removeClass("loading");
+                    related.addClass("detailed");
+                    //setTimeout("rapikan()",500);
+                }); 
+            }
+         }
+        });
+        $(".xlowBorder.unit").hover( function () {
+            var related = $(this);
+			var unit_id= $(this).attr("uid");
+            var icon = $("#" + unit_id, related); 
+            if (icon.hasClass("loaded")) {
+            }else{
+                related.addClass("loading"); 
+                $.ajax({
+                url:"https://97e5ea6e714e0cf2633c01f7a3ab8eee00a8eb35.googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/icon" + unit_id + ".png",
+                type:'HEAD',
+                error:
+                    function(){related.removeClass("loading");},
+                success:
+                    function(){
+                    icon.attr("style", "background-image: url('" + "https://97e5ea6e714e0cf2633c01f7a3ab8eee00a8eb35.googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/icon" + unit_id + ".png" + "')");
+                    icon.addClass("loaded");
+                    related.removeClass("loading"); 
+					loadPic(icon.attr("id"));
+					setTimeout(function() { insertMaterial(related.attr("gid")); }, 0);
+                    }
+                });   
+            }
+        });
+		getEvolist();
+        mount();	
+		$("#cb2").prop('checked', false);		
+		jQuery('#cb2').on('click', function() {
+			if ($("#cb2:checked").length > 0)
+				setTimeout ( "groupByEvo()", 500 );     
+			else
+				setTimeout ( "sort(\"hit\")", 500 ); 
+		});        
+}
+function writeData(d, cls, k){
+        var here="";
+        try{
+        var local="";
+        local = "<div class='xlowBorder " + d["element"] + " unit " + d["guide_id"] + " " + k + " " + cls + "' "; 
+        local += " uid='" + d["guide_id"] + "' gid='" + k + "'  hit='" + d['hits'] + "' bc='" + d['max bc generated'] + "' " 
+        try{
+            local += "bb='" + (d['bb']["max bc generated"] == undefined ? 
+                (d['bb']["levels"][9]["max bc generated"] == undefined ? "0" : d['bb']["levels"][9]["max bc generated"])
+                : d['bb']['max bc generated']) + "' " 
+        }catch(e){
+            local += "bb='0' " 
+        }
+        try{
+            local += "sbb='" + (d['sbb']['max bc generated'] == undefined ? 
+            (d['sbb']["levels"][9]["max bc generated"] == undefined ? "0" : d['sbb']["levels"][9]["max bc generated"])
+            : d['sbb']['max bc generated']) + "' " 
+        }catch(e){
+            local += "sbb='0' "}
+        
+        try{
+            var n = d['max bc generated']*150 - d["bb"]["levels"][9]["bc cost"] * 300 + d['stats']['_lord']['atk'] * 2 
+                    + d['stats']['_lord']['hp'] * 0.5;
+            if (d['bb']["max bc generated"] !== undefined){
+                for (var l in d['bb']["levels"][0]["effects"]){
+                    if (d['bb']["levels"][0]["effects"][l]["bb atk%"] !== undefined){
+                        n += d['bb']["levels"][9]["effects"][l]["bb atk%"] * 0.5 *
+                            (d['bb']["levels"][9]["effects"][l]["target area"] === 'aoe' ?
+                             50 : 10);  
+                        break;
+                    }
+                }
+            }else if (d['bb']["levels"][9]["max bc generated"] !== undefined){
+                n += 0;
+            }
+            local += "arena='" + n + "' ";
+        }catch(e){
+            local += "arena='0' "}
+        local += "><div class='section name'>";
+        local += "<div img='https://03e8b5f260161192cd616a19d3ce33108ff1564e.googledrive.com/host/0B4hJr8BXxvFZRmc0aVZ2VS1VRFE/unit" + d["guide_id"] + ".png' element='" + d["element"] + "' class='banner'><h2 class='_name'>";
+        local += "<div class='_icon' id='" + d["guide_id"] + "'>";
+        local += "<span class='loader'>&nbsp;</span>";
+        local += "<span class='loader d1'>&nbsp;</span>";
+        local += "<span class='loader d2'>&nbsp;</span>";
+        local += "<span class='loader d3'>&nbsp;</span>";
+        local += "<span class='rarity'>"+ d['rarity'] + "&#9733;</span>";
+        local += "<span class='iden'>" + d["name"].substring(0,1) + "</span>";
+        local += "</div>" + d["name"] + " (" + k + ")" + "</h2></div></div>";
+        
+        local += "<div class='lowBorder'>";
+        local += "<h2 style='margin: 0 0 10px;'>Normal Attack <span onclick='sort(\"hit\");'>" + d['hits'] + " Hit</span>"
+            + " <b onclick='sort(\"bc\");'>" + d['max bc generated'] + " BC</b></h2>";
+    	local += "<img class='art'></img>";
+		local += "<div class='unit-art'><img class='unitGif " + d["guide_id"] + "'></img><div class='stay-bottom'><h2>" + d["leader skill"]["name"]; + "</h2>";
+		local += "<h3>" + d["leader skill"]["desc"] + "</h3></div></div>";
+        try {    	    
+            local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["leader skill"])) + "</span></h3>";
+        }catch(e){
+            local += "<h3>Sorry! can't parse...</h3>";
+        }
+		if (d["extra skill"] !== undefined){
+			try {    	    
+				local += "<h2>Extra Skills : " + JSON.stringify(d["extra skill"]["conditions"]) +  " </h2>";
+				local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["extra skill"])) + "</span></h3>";
+			}catch(e){
+				local += "<h3>Sorry! can't parse...</h3>";
+			}
+		}
+		local += "<div class='hide'><table class='LS prop'>";
+		for(var k in d["leader skill"]){
+			if (k=="name") {
+			}else if  (k=="desc") {
+    		}else if  (k=="effects") {
+            for(var l in d["leader skill"][k]){
+                for(var m in d["leader skill"][k][l]){
+                    
+                    if (m.indexOf('high') >= 0){
+                        if (d["leader skill"][k][l][m.replace("high", "low")] == undefined)
+                            local += "<tr><td>" + m + "</td><td >" + d["leader skill"][k][l][m] + "</td></tr>";
+                        else
+                            local += "<tr><td>" + m.replace("high", "") + "</td><td >" 
+                                + d["leader skill"][k][l][m.replace("high", "low")] 
+                                + " - " + d["leader skill"][k][l][m] + "</td></tr>";
+                    }else if (m.indexOf('low') >= 0){
+                        if (d["leader skill"][k][l][m.replace("low", "high")] == undefined)
+                            local += "<tr><td>" + m + "</td><td >" + d["leader skill"][k][l][m] + "</td></tr>";
+                    }else
+                        local += "<tr><td>" + m + "</td><td >" + d["leader skill"][k][l][m] + "</td></tr>";
+                }
+            }
+			}else{
+				local += "<tr><td>" + k + "</td><td >" + d["leader skill"][k] + "</td></tr>";
+			}
+		} 
+		local += "</table></div></div>";
+		} catch (e) { 
+            local="";
+            //console.log("leader");
+            return;
+            }
+        here+=local;
+		here +="<div class='lowBorder evo'> </div>";
+        try {
+            here +=countAI(d["ai"]);
+        }catch(e){}		
+		try { //try parsing arena AI
+		local = "<div class='lowBorder hide'><h2>Arena AI</h2>";
+		local += "<table class='dempet bb'><tr>";
+        for(kk in d["ai"][0]){
+            local +="<th>" + kk + "</th>";                                
+        }
+        local +="</tr>";
+		for(ea in d["ai"]){
+            local += "<tr>";
+            for (kk in d["ai"][ea]){
+                if (d["ai"][ea]["action"] === "skill")
+                    local+="<td class='L'>" + d["ai"][ea][kk] + "</td>";
+                else
+                    local+="<td>" + d["ai"][ea][kk] + "</td>";
+            }
+            local +="</tr>";
+        }
+        local +="</table></div>";
+		} catch (e) { local="";}
+        here+=local;
+        try{ //parse other stat
+        local = "<div class='lowBorder hide'><table class='prop'>";
+        for(var k in d){
+    		if (k=="bb") {
+    		}else if  (k=="sbb") {
+    		}else if  (k=="stats") {
+        	}else if  (k=="name") {
+            }else if  (k=="id") {
+            }else if  (k=="imp") {
+            }else if  (k=="rarity") {
+            }else if  (k=="exp_pattern") {
+            }else if  (k=="lord damage range") {
+    		}else if  (k=="leader skill") {
+    		}else if  (k=="hits") {
+        	}else if  (k=="guide_id") {
+    		}else if  (k=="max bc generated") {
+    		}else if (k == "hit dmg% distribution"){
+    		}else if (k == "element"){
+			}else if  (k=="ai") {
+        	}else{
+				local += "<tr><td>" + k + "</td><td >" + d[k] + "</td></tr>";
+			}
+		}							
+		local += "</table></div>";
+        } catch (e) {local="";}
+        here+=local;
+        here += "<div class='lowBorder none'>";
+        try { //parsing unit stats
+        local = "<h2 class='hide'>Status</h2>";
+        local += "<table class='STAT dempet bb firstcol-hide'>";
+        local += "<tr><th>&nbsp;</th><th>HP</th><th>ATK</th>" +
+            "<th>DEF</th><th>REC</th></tr>";
+        $.each(statCols, function() {  
+            var st = this;
+            if (st == "_lord")
+                local +="<tr>";
+            else
+                local +="<tr class='hide'>";
+            local +="<td>" + this + "</td>";
+            $.each(stats, function() {
+                if (d['stats'][st][this] == undefined)
+                    local += "<td>" + d['stats'][st][this + ' min'] + "-" + d['stats'][st][this + ' max'] + "</td>";
+                else
+                    if (st == "_lord")
+                        local += "<td class='L'><b>" + d['stats'][st][this] + "</b></td>";
+                    else
+                        local += "<td class='L'>" + d['stats'][st][this] + "</td>";
+            });
+            //local += "<td>" + d['imp']['max ' + st] + "</td>";
+            local += "</tr>";                    
+        });
+        local +="<tr><td>Max Imp</td>";
+        $.each(stats, function() {
+            local += "<td class='L'><b>" + d['imp']['max ' + this] + "</b></td>";
+        });
+        local += "</tr>";   
+        local +="</table><div style='clear:both;height:0px;' class='lowBorder'>&nbsp;</div></div>";
+        }catch(x){ local = "";}
+        here += local;
+        here += "<span class='close'>&#10006;</span>";
+		
+        here += "<div class='t_bb'><h2>BB: Loading....</h2></div>";
+        //if(cls === "visible")
+            setTimeout(function(){readBB('bb',"BB", d)},timeoutNum);
+        if (d["sbb"] !== undefined){
+        here += "<div class='t_sbb'><h2>SBB: Loading....</h2></div>";
+        //if(cls === "visible")
+            setTimeout(function(){readBB('sbb',"SBB", d)},timeoutNum);     
+        }
+		if (d["ubb"] !== undefined){
+        here += "<div class='t_ubb'><h2>UBB: Loading....</h2></div>";
+        //if(cls === "visible")
+            setTimeout(function(){readBB('ubb',"UBB", d)},timeoutNum);     
+        }
+        here += "</div></div>";
+        $(".rep." + d["guide_id"]).replaceWith(here);
+        doneNum++;
+}
+function countAI(d){
+    var here ="";
+    var result = 0;
+    for(ea in d){
+        if (here === "") {
+            if (d[ea]["target conditions"].indexOf("_under") >= 0)
+                here = "assault";
+            else if (d[ea]["target conditions"].indexOf("_over") >= 0)
+                here = "init";
+            else
+                here = "striker";
+        }
+        if (d[ea]["action"] === "skill")
+            result += (100-result) * d[ea]["chance%"] / 100;
+    }
+    return "<span class='reverse-hide percen " + here + "'>" +
+        "<span></span><span></span><span></span>" + result + "<i>%</i></span>";
+}
+function parseLv(d,l,m){
+    var c1 = d[0]["effects"][l][m];
+    var c2 = d[9]["effects"][l][m];
+    if (typeof(c1) === 'object'){
+        try{
+            var here="";
+            for (var _p in c1){
+                if(_p.indexOf("% buff") >= 0){
+                    here += (here === "" ? "" : ", ");
+                    if (c1["proc chance%"] !== undefined)
+                            if(c1["proc chance%"] === c2["proc chance%"])
+                                here += c1["proc chance%"] +"% chance ";
+                            else
+                                here += "(" + c1["proc chance%"] + "&nbsp;-&nbsp;" + c2["proc chance%"] +")% chance ";
+                        if (c1[_p] === c2[_p])
+                            here += c1[_p] + "% " + _p.replace("% buff","");
+                        else
+                            here += "(" + c1[_p] + "&nbsp;-&nbsp;" + c2[_p] + ")% " + _p.replace("% buff","");
+                }else if(_p === "proc chance%"){
+                }else{
+                    try{
+                        if (_p == c1.indexOf(c1[_p])) {
+                            if (c1[_p] === c2[_p])
+                                here += (here === "" ? "" : ", ") + c1[_p];
+                            else
+                                here += (here === "" ? "" : ", ") + c1[_p] + " - " + c2[_p];
+                        }else{
+                            if (c1[_p] === c2[_p])
+                                here += (here === "" ? "" : ", ") + _p + " " + c1[_p];
+                            else
+                                here += (here === "" ? "" : ", ") + _p + " " + c1[_p] + " - " + c2[_p];
+                        }
+                    }catch(e){
+                        if (c1[_p] === c2[_p])
+                            here += (here === "" ? "" : ", ") + _p + " " + c1[_p];
+                        else
+                            here += (here === "" ? "" : ", ") + _p + " " + c1[_p] + " - " + c2[_p];
+                    }   
+                }
+            }
+            c1 = here;
+            c2 = here;
+        }catch(e){
+            c1 = JSON.stringify(d[0]["effects"][l][m]);
+            c2 = JSON.stringify(d[9]["effects"][l][m]);
+        }
+    }else if (c1 >= 1000){
+        c1 = c1%10 != 0 ? c1 : (c1/1000) + 'k';
+    }else if(c1.toString() === "true")
+        c1 ="";
+    if (c2 >= 1000){
+        c2 = c2%10 != 0 ? c2 : (c2/1000) + 'k';
+    }else if(c2.toString() === "true")
+        c2 = "";
+    if (c1.toString() === c2.toString())
+        return c1;
+    else if (m.indexOf("heal") >= 0)
+        return "<sup>" + c1 + "</sup>" + c2;
+    else
+        return "(" + c1 + "&nbsp;-&nbsp;" + c2 + ")";
+}
+
+function parseBC(d , key){
+    var prev = 0;
+    if (key === "sbb"){
+       prev = d["bb"]["levels"][9]["bc cost"]; 
+    }
+    var d1 = d[key]["levels"]
+    var c1 = d1[0]["bc cost"];
+    var c2 = d1[9]["bc cost"];
+    if (c1.toString() === c2.toString())
+        return c1 + " BC" + (prev > 0 ? " (" + (prev + c1) + " BC)" : "");
+    else
+        return c1 + " - " + c2 + " BC" + (prev > 0 ? " (" + (prev + c1) + " - " + (prev + c2) + " BC)" : "");
+}
+
+function tellIt(prefix, d,l,m, suffix) {
+    if (d[0]["effects"][l][m] !== undefined){
+        return prefix + parseLv(d,l,m) + suffix;
+    }else{
+        return "";
+    }
+}
+function elementTag(here){
+    return here.replace(/(fire|thunder|water|earth|dark|light){1}/g, '<$1>$1</$1>')
+            .replace(/((<w)|(<f)|(<t)|(<e)|(<d)|(<l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
+            .replace(/((<\/w)|(<\/f)|(<\/t)|(<\/e)|(<\/d)|(<\/l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
+			.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"")
+			.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");    
+}
+function smartStringJoin(s1, s2){
+    nonTag = s2.replace(/(\(\d*\))/g, '').replace(/(~\()|(\)~)/g,"").trim();
+	nonTag1 = s1.replace(/(\(\d*\))/g, '').replace(/(~\()|(\)~)/g,"").trim();
+    //s2 = s2.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"");
+    //s2 = s2.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");
+	var a2 = nonTag.split(" ");
+    if (s1.indexOf(s2) >= 0)
+        return s1;
+    for (var i=a2.length - 1; i>=0;i--){
+      a2.splice(i,1);
+      if(nonTag1.indexOf(a2.join(" ") + " ") >= 0 && a2.join(" ").length > 1)
+         break;
+    }
+    var a3 = nonTag.split(" ");
+    for (var i=a3.length - 1; i>=0;i--){          
+        a3.splice(0,1);
+        if((nonTag1+"-").indexOf((a3.join(" ")+"-")) >= 0 && a3.join(" ").length > 1)
+            break;        
+    } 
+    var end = a3.join(" ");
+    if (a2.length > 0){               
+        var rep = a2.join(" ") + " " + 
+           s2.replace(a2.join(" ") + " ","") + "/";
+        if(end.length >= 1){
+            //console.log(s1 + " + " + nonTag + " : " + rep + " - " + a2.join(" ") + " - " + end);
+            rep = rep.replace(end, ""); 
+            rep = rep.replace(" /", "/");
+            if(rep.replace(a2.join(" "), "") == "/")
+                rep = a2.join(" ") + " ";
+        }        
+        return s1.replace(a2.join(" ") + " ", rep);
+    }else{
+        if (a3.length > 0)  
+            return s1.replace(end, "") + (s1 === "" ? "" : ", ") + s2;  
+        else
+            return (s1 === "" ? "" : s1 + ", ") + s2;      
+    }
+}
+function readLeader(d) {
+    var here ="";
+    var syarat = "";
+    for (var k in d) {
+        if (k=="name") {
+        }else if  (k=="desc") {
+        }else if  (k=="effects") {
+            for(var l in d[k]){
+                for(var m in d[k][l]){
+                    if (m.indexOf('hp drain') >= 0){
+                        if (m == 'hp drain chance%'){
+                            var _rst = "";
+                            _rst = d[k][l][m] + "% absorb ";
+                            if (d[k][l]["hp drain% low"] != d[k][l]["hp drain% high"])
+                                _rst += d[k][l]["hp drain% low"] + "%&nbsp;-&nbsp;";
+                            _rst += d[k][l]["hp drain% high"] + "%&nbsp;dmg";
+                            here = smartStringJoin(here, _rst);
+                        }else if (m == "hp drain% low"){
+                        }else if (m == "hp drain% high"){                            
+                        }else
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                            //here += (here === "" ? "" : ", ") + m + " " + d[k][l][m];
+                    }else if (m.indexOf('based on hp') >= 0 && d[k][l]["buff proportional to hp"] !== undefined && d[k][l][m.replace("extra buff based on hp", "base buff")] !== undefined) {
+						here = smartStringJoin(here, d[k][l][m.replace("extra buff based on hp", "base buff")] + "% to " 
+									+ d[k][l][m] + "%&nbsp;" + m.replace("% extra buff","") + " " + d[k][l]["buff proportional to hp"]);
+					}else if (m === "buff proportional to hp" ){
+					}else if (m.indexOf('base buff') >= 0 && d[k][l][m.replace("base buff" ,"extra buff based on hp")] !== undefined){
+                    }else if (m.indexOf('dmg% to hp% when attacked') >= 0){
+                            if (m == "dmg% to hp% when attacked chance%"){
+                            var _rst = "";
+                            _rst = d[k][l]["dmg% to hp% when attacked chance%"] + "%&nbsp;recover ";
+                            if (d[k][l]["dmg% to hp% when attacked low"] != d[k][l]["dmg% to hp% when attacked high"])
+                                _rst += d[k][l]["dmg% to hp% when attacked low"] + "%&nbsp;-&nbsp;";
+                            _rst += d[k][l]["dmg% to hp% when attacked high"] +"%&nbsp;dmg&nbsp;taken";
+                            here = smartStringJoin(here, _rst);
+                        }else if (m == "dmg% to hp% when attacked low"){
+                        }else if (m == "dmg% to hp% when attacked high"){
+                        }else
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                    }else if (m.indexOf('dmg reduction') >= 0){
+                        if(m=="dmg reduction chance%") {
+                            here = smartStringJoin(here, d[k][l]["dmg reduction chance%"] + "%&nbsp;chance reduce " +
+                                d[k][l]["dmg reduction%"] + "%&nbsp;dmg");
+                        }else if(m =="dmg reduction%"){
+                        }else
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);                    
+                    }else if (m.indexOf('high') >= 0){
+                        if (d[k][l][m.replace("high", "low")] == undefined)
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                        else{
+                            var _rst=""
+                            if (d[k][l][m.replace(" high", "%")] !== undefined)                       
+                                _rst += d[k][l][m.replace(" high", "%")] == 100 ? "" : d[k][l][m.replace(" high", "%")] + "% ";  
+                            if (d[k][l][m.replace("high", "low")] != d[k][l][m])
+                                _rst += d[k][l][m.replace("high", "low")] + "&nbsp;to&nbsp;";
+                            _rst += d[k][l][m] + " " + m.replace("high", "");                            
+                            here = smartStringJoin(here, _rst);
+                        }
+                    }else if (m.indexOf('%') >= 0 && d[k][l][m.replace("%", " high")] !== undefined ){
+                    }else if (m.indexOf('chance%') >= 0 && d[k][l][m] == 100 ){
+                    }else if (m.indexOf(' resist%') >= 0){
+                        if (d[k][l]["curse resist%"] == d[k][l]["injury resist%"]    
+                            && d[k][l]["paralysis resist%"] == d[k][l]["poison resist%"]    
+                            && d[k][l]["sick resist%"] == d[k][l]["weaken resist%"]    
+                            && d[k][l]["sick resist%"] == d[k][l]["paralysis resist%"]  
+                            && d[k][l]["curse resist%"] == d[k][l]["paralysis resist%"]                        
+                        ){
+                            if (m === "curse resist%"){
+                                if (d[k][l][m] == 100)
+                                    here = smartStringJoin(here, "nullifies all status");
+                                else
+                                    here = smartStringJoin(here, "+" + d[k][l][m] + "% " + " resistant to all status");
+                            }else if (m === "injury resist%"){                                
+                            }else if (m === "paralysis resist%"){                                
+                            }else if (m === "poison resist%"){                                
+                            }else if (m === "sick resist%"){                                
+                            }else if (m === "weaken resist%"){                                
+                            }else{
+                                if (d[k][l][m] == 100){
+                                    here = smartStringJoin(here, "immune to " + m.replace(" resist%",""));
+                                }else{
+                                    here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("%",""));
+                                } 
+                            }
+                        }else{
+                            if (d[k][l][m] == 100){
+                                here = smartStringJoin(here, "immune to " + m.replace(" resist%",""));
+                            }else{
+                                here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("%",""));
+                            } 
+                        }
+                    }else if (m.indexOf(' units do extra elemental weakness dmg') >= 0 && d[k][l][m] == true){
+                        if (d[k][l]["dark units do extra elemental weakness dmg"] 
+                                == d[k][l]["light units do extra elemental weakness dmg"] 
+                                == d[k][l]["fire units do extra elemental weakness dmg"] 
+                                == d[k][l]["thunder units do extra elemental weakness dmg"] 
+                                == d[k][l]["water units do extra elemental weakness dmg"] 
+                                == d[k][l]["earth units do extra elemental weakness dmg"]
+                                ){
+                        }else{
+                            syarat = smartStringJoin(syarat, ' for ' + m.replace(' units do extra elemental weakness dmg',''));
+                        }
+                    }else if (m.indexOf('first x turns') >= 0) {
+                        if(m=== "first x turns")
+                            syarat += " first " + d[k][l][m] + " turns";
+                        else
+                            here = smartStringJoin(here, m.replace("first x turns","") + " " + d[k][l][m]);
+                    }else if (m == 'unique elements required'){
+                        syarat += " (min " + d[k][l][m] + " elements)";
+                    }else if (m == 'elements buffed'){
+                        syarat += ' to ' + d[k][l][m];
+                    }else if (m.indexOf('% buff') >= 0){
+                        here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("% buff", ""));
+                    }else if (m.indexOf('low') >= 0){
+                        if (d[k][l][m.replace("low", "high")] == undefined)
+							here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                    }else if (m.indexOf('per turn') >= 0){
+                        here = smartStringJoin(here, "+" + d[k][l][m] + " " + m.replace("per turn", "/turn"));
+                    }else if (m.indexOf(' spark') >= 0){
+                        here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("%",""));
+                    }else if (m.indexOf('%') >= 0){
+                        here = smartStringJoin(here, d[k][l][m] + "% " + m.replace("%","").replace(/ /g,"&nbsp;"));
+                    }else
+                        here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
+                }
+                //here = smartStringJoin(here, syarat);
+                here += here.indexOf(" to ") >= 0 ? syarat.replace(" to ", ",") : syarat;
+                syarat = "";
+            }
+            
+    	}
+    }
+    return here;
+}
+function readExclude(d,l,list,k){
+    var here ="";
+    var add="";
+    var target ="";
+    var turn="";
+    var prolog ="";
+    for (var m in d[0]["effects"][l]) {        
+        if(list.indexOf(m) >=0){}
+        else{
+            if (m === 'bb atk%'){
+                here = smartStringJoin(here, tellIt(k["hits"]!== undefined ? k["hits"] + " hit " : "", d,l,m,"% "));
+                add = " atk ";
+            }
+            if (m === 'target area'){
+                if (d[0]["effects"][l]["target type"] === "party"){
+                }else if (d[0]["effects"][l]["target type"] === "self")
+                    target += " to&nbsp;self ";
+                else if (d[0]["effects"][l]["random attack"])
+                    target += tellIt(" ", d,l,"hits"," hit random" + add);
+                else if (d[0]["effects"][l]["target type"] === "enemy" && d[0]["effects"][l][m] === "aoe" && add === "")
+                    target += " to&nbsp;all&nbsp;enemies ";
+                else
+                    target += tellIt(" ", d,l,m,add);
+                add = "";
+            }  
+            if (m === 'elements added'){
+                here = smartStringJoin(here, tellIt("add ", d,l,m," elements "));
+            } 
+            if (m === 'element buffed'){
+                if (//d[0]["effects"][l]["target type"] === "party" &&
+                     d[0]["effects"][l][m] === "all")
+                    here += "";
+                else
+                    here = smartStringJoin(here, tellIt("to ", d,l,m," elements "));
+            }
+            if (m === 'increase bb gauge gradual'){
+                here = smartStringJoin(here, tellIt("+", d,l,m, " bb/turn "));
+            }
+            if (m === 'increase bb gauge'){
+                here = smartStringJoin(here, tellIt("+", d,l,m, " bb to " + d[0]["effects"][l]["target type"] ));
+            }
+            if (m === 'shield element'){
+                here = smartStringJoin(here, tellIt("", d,l,m," shield ") +
+                    tellIt("", d,l,"shield hp"," HP ") +
+                    tellIt("", d,l,"shield def"," DEF "));
+            }
+            if (m.indexOf("turns") >=0){
+                if (d[0]["effects"][l][m.replace(" turns"," high")] !== undefined){
+                }else if (m.indexOf("taunt") >= 0 || m.indexOf("stealth") >= 0)
+                    turn = smartStringJoin(turn, " on " + tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
+                else //if(m.indexOf("buff") >= 0 || '% converted turns,resist status ails turns, bc fill when attacked turns (38)'.indexOf(m) >= 0)
+                    turn = tellIt(" ", d,l,m, " turns ");
+                /*else if(m.indexOf('dmg% reduction turns') >= 0)
+                    turn = tellIt(" ", d,l,m, m.replace("dmg% reduction ",""));
+                else
+                    turn = tellIt(" ", d,l,m, " " + m.replace(/ /g,"&nbsp;") + " ");
+                    */
+            } 
+            if (m.indexOf("% buff") >=0){
+                if (m === 'atk% buff (46)' && d[0]["effects"][l]['converted attribute'] !== undefined){ 
+                }else if ($.inArray(m.replace("% buff", ""), ails) >= 0) {
+					here = smartStringJoin(here, tellIt("add ", d,l,m, "% " + m.replace("% buff", "") + " to atk"));
+				}else
+                    here = smartStringJoin(here, tellIt("+", d,l,m, "% " + m.replace("% buff", "")));
+            }
+            if (m.indexOf("rec added%") >=0){
+                here = smartStringJoin(here, tellIt("+", d,l,m, "% rec" + m.replace("rec added% ", "")));
+            }   
+            if (m.indexOf('%') >= 0 && m.indexOf('bb ') >= 0 && m !== 'bb atk%' ){
+                here = smartStringJoin(here, tellIt("+", d,l,m, '% ' + m.replace("bb ", "").replace("%", "")));
+            }           
+            if (m.indexOf(" high") >=0){
+                if (d[0]["effects"][l][m.replace(" high", "%")] !== undefined){
+                    here += d[0]["effects"][l][m.replace(" high", "%")] == 100 ? "" : tellIt(" ", d,l,m.replace(" high", "%"), "% ");
+                }
+                if (d[0]["effects"][l][m.replace(" high", " low")] !== undefined ){
+                    if (d[0]["effects"][l][m.replace(" high", " low")] != d[0]["effects"][l][m])
+                        here += tellIt(m.replace(" high", "") + " ", d,l,m.replace(" high", " low"), " to ");
+                    here += tellIt("", d,l,m, "");
+                }else
+                    here += tellIt("", d,l,m, "");
+                if (d[0]["effects"][l][m.replace(" high", " turns")] !== undefined){
+                    here += tellIt(" ", d,l,m.replace(" high", " turns"), " turns");
+                }
+            }
+            if (m === 'converted attribute'){
+                if (d[0]["effects"][l]["atk% buff (46)"] !== undefined)
+                    prolog = smartStringJoin(prolog, tellIt(tellIt("convert ", d,l,"atk% buff (46)", "% "),
+                                    d,l,m, " to atk(46) "));
+                else
+                    prolog = smartStringJoin(prolog, tellIt("convert ", d,l,m, " "));
+            }
+            
+            if (m === 'bb atk%'){
+            }else if (m === 'target area'){ 
+            }else if (m === 'target type'){ 
+            }else if (m === 'random attack'){ 
+            }else if (m === 'converted attribute'){
+            }else if (m === 'elements added'){ 
+            }else if (m === 'shield def'){ 
+            }else if (m === 'shield element'){ 
+            }else if (m === 'shield hp'){ 
+            }else if (m === 'element buffed'){ 
+            }else if (m === 'increase bb gauge gradual'){
+            }else if (m === 'increase bb gauge'){
+            }else if (m === 'hits'){             
+            }else if (m.indexOf("resist") >=0 && m.indexOf("turns") < 0){ 
+                if (d[0]["effects"][l][m] == 100)
+                    here = smartStringJoin(here, m.replace("%",""));
+                else
+                    here = smartStringJoin(here, tellIt("", d,l,m,"% " + m.replace("%","")));
+            }else if (m.indexOf('%') >= 0 && m.indexOf('bb ') >= 0 ){
+            }else if (m.indexOf("turns") >=0){ 
+            }else if (m.indexOf("% buff") >=0){ 
+            }else if (m.indexOf("rec added%") >=0){   
+            }else if (m.indexOf(" high") >=0 && d[0]["effects"][l][m.replace(" high", " low")] !== undefined){
+            }else if (m.indexOf(" low") >=0 && d[0]["effects"][l][m.replace(" low", " high")] !== undefined){
+            }else if (m.indexOf("%") >=0 && d[0]["effects"][l][m.replace("%", " high")] !== undefined){
+            }else if (m.indexOf('%') >= 0){
+                here = smartStringJoin(here, tellIt("", d,l,m,"% " + m.replace("%", "").replace(/ /g,"&nbsp;")));
+            }else if (m.indexOf('buff #') >= 0){
+                here = smartStringJoin(here, tellIt("", d,l,m,""));
+            }else if (m === 'bb elements'){
+                here = here + tellIt("", d,l,m," elements");
+            }else{
+                here = smartStringJoin(here, tellIt(m.replace(/ /g,"&nbsp;") + " ", d,l,m,""));
+            }
+        }
+    }
+    if (turn + target !== "" ) {
+        here = prolog + here + turn + target;
+        target = "";
+        turn = "";
+        prolog = "";
+    }
+    return here;
+}
+function readBB(key, title, d){
+    var here = "";    
+    try{ //creating BB
+        here += "<div class='lowBorder name'><h2>" + title + " : " + d[key]["name"];
+		var dmgRatio = "";
+		var tmp = " <span class='largeInline'>cost: <b>" + parseBC(d, key) + "</b> ";
+        if (d[key]["max bc generated"] !== undefined){
+            tmp += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["max bc generated"] + " ";
+            for (var l in d[key]["levels"][0]["effects"]){
+                if (d[key]["levels"][0]["effects"][l]["bb atk%"] !== undefined){
+                    tmp += parseLv(d[key]["levels"],l,"target area").toUpperCase();
+					dmgRatio = d[key]["levels"][9]["effects"][l]["bb atk%"] / 
+						(d[key]["levels"][9]["bc cost"] + (key === "sbb" ? d["bb"]["levels"][9]["bc cost"] : 0) );
+					dmgRatio = dmgRatio > 0 ? " <small class='topLabel'>" + parseFloat(dmgRatio).toFixed(2) + "</small>" : "";
+				}					
+            }
+            tmp += " BC </b> ";
+        }else if (d[key]["levels"][9]["max bc generated"] !== undefined){
+            tmp += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["levels"][9]["max bc generated"] + " random BC </b>";
+        }
+        here += dmgRatio + tmp + "</span></h2>";
+        //here += "<h3>" + d[key]["desc"] + "</h3>"; - ga kebaca juga
+
+        try{
+            here +="<h3 class='reverse-hide tech' note='" + title + " action'>";
+            var seq = 0;
+            var phase = "";
+            var tmp= "";
+            var i=0;
+            var und="";
+        for(var l in d[key]["levels"][0]["effects"]){ 
+            var content = readExclude(d[key]["levels"],l, "effect delay time(ms)/frame bb flat atk", d[key]);
+            var ph = d[key]["levels"][0]["effects"][l]["effect delay time(ms)/frame"];
+            if (tmp.indexOf("hit") >= 0 && tmp.indexOf("atk") >= 0)
+                if (phase !== ph)
+                    seq = 2;
+                else
+                    seq = 0;
+            else if (content.indexOf("hit") >= 0 && content.indexOf("atk") >= 0)
+                seq = 1;
+            else
+                seq = 0;
+                
+            if(phase !== ph){  
+                if (content.indexOf("hit") >= 0 && content.indexOf("atk") >= 0)
+                phase = ph;
+                if ( ph === undefined)
+                    und += "<span phase='" + (seq != 1 ? '0' : '1') + "' delay='-'>" + content + "</span>";
+                else
+                    tmp += "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>";
+            }else{
+                if (tmp.indexOf("hit") >= 0 && tmp.indexOf("atk") >= 0){
+                    tmp = "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>" + tmp;                    
+                }else{
+                    tmp += "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>";                    
+                }
+            }                      
+        }        
+        here += elementTag(tmp + und) + "</h3>";
+        }catch(e){here += "<h3 class='reverse-hide'>Sorry!!, parse failed!</h3>";}
+        here +="<div class='hide'><table class='BB dempet'>";	
+		for(var k in d[key]["levels"][0]){
+            if (k == "effects"){
+                for(var l in d[key]["levels"][0]["effects"]){
+                    here += "<tr class='p"+l+"'><td colspan='2'><h2><small>Phase " + l + " - " +
+                            d[key]["levels"][0]["effects"][l]["effect delay time(ms)/frame"] + "</small></h2></td></tr>";
+                    for(var m in d[key]["levels"][0]["effects"][l]){
+                        if (m == "effect delay time(ms)/frame"){
+                        }else{
+                            here += "<tr class='p"+l+"'><td>" + m + "</td>";
+                            var c1 = d[key]["levels"][0]["effects"][l][m];
+                            var c2 = d[key]["levels"][9]["effects"][l][m];
+                            if(typeof c1 === 'object' && typeof c2 === 'object'){
+                                try{
+                                    var tmp = "";
+                                    tmp += "<td>&nbsp;</td>";
+                                    for(var t1 in c1){
+                                        try{
+                                            if (t1 == c1.indexOf(c1[t1])) 
+                                                tmp += "<tr class='p"+l+"'><td>&nbsp;</td>";
+                                            else{
+                                                tmp += "<tr class='p"+l+"'><td>" + t1 + "</td>";
+                                            }
+                                        }catch(e){
+                                            tmp += "<tr class='p"+l+"'><td>" + t1 + "</td>";
+                                        }
+                                        var _c1 = c1[t1];
+                                        var _c2 = c2[t1];
+                                        if (_c1.toString() === _c2.toString())
+                                    		tmp += "<td>" + _c1 + "</td>";
+                            			else{
+                                			tmp += "<td>" + _c1 + " - " + _c2 + "</td>";
+                                            tmp += "</tr><tr class='p"+l+"'><td colspan='2' class='bblv'>";
+                                            for (i=0;i<10;i++){
+                                    			tmp += "<span>" + d[key]["levels"][i]["effects"][l][m][t1] + "</span>";
+                            				}    
+                                            tmp += "</td>";
+                            			}
+                                    }
+                                    here += tmp;
+                                }catch(e){
+                                    c1 = JSON.stringify(d[key]["levels"][0]["effects"][l][m]);
+                                    c2 = JSON.stringify(d[key]["levels"][9]["effects"][l][m]);
+                                    if (c1.toString() === c2.toString())
+                            			here += "<td>" + c1 + "</td>";
+                        			else
+                            			here += "<td>" + c1 + " - " + c2 + "</td>";                                    
+                                }
+                            }else{                                
+                            	if (c1.toString() === c2.toString())
+                    				here += "<td>" + c1 + "</td>";
+                    			else{
+                        			here += "<td>" + c1 + " - " + c2 + "</td>";
+                                    here += "</tr><tr class='p"+l+"'><td colspan='2' class='bblv'>";
+                                    for (i=0;i<10;i++){
+                        				here += "<span>" + d[key]["levels"][i]["effects"][l][m] + "</span>";
+                    				}    
+                                    here += "</td>";
+                                    
+                    			}
+                            }
+                        }
+                    }
+                }
+            }else{                        
+    			here += "<tr><td>" + k + "</td>";
+    			if (d[key]["levels"][0][k] == d[key]["levels"][9][k])
+    				here += "<td >" + d[key]["levels"][0][k] + "</td>";
+    			else{
+        			here += "<td >" + d[key]["levels"][0][k] + " - " +
+                    d[key]["levels"][9][k] + "</td>";
+                    here += "</tr><tr><td colspan='2' class='depth1 bblv'>";
+                    for (i=0;i<10;i++){
+                    	here += "<span>" + d[key]["levels"][i][k] + "</span>";
+                	}    
+                    here += "</td>";
+    			}
+            }
+			here += "</tr>";
+		};
+		for(var k in d[key]){
+			if (k == "levels"){							
+			}else if (k == "name"){							
+			}else if (k == "desc"){    					
+			}else if (k == "hit dmg% distribution"){          
+			}else if (k == "bc cost"){   
+			}else{
+				here += "<tr><td>" + k + "</td><td colspan='10'>" + d[key][k] + "</td></tr>";
+			}
+		}
+        here +="</table></div>";
+        here +="</div>";
+	}catch(e){here=""};
+    $(".t_" + key,".unit." + d["guide_id"]).replaceWith(here);
+    doneNum++;
+    //return here;
+}
+
+function getEvolist(){
+	$.getJSON("https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + commits[0]['sha'] + "/jp/evo_list.json" , function(data) {
+	$("#loading-tag").html("Loading evo material");
+    _e = data;
+	var i=0;
+		//setTimeout(function() { insertMaterial(gid); }, i++);
+
+	$("#loading-tag").html("Loading finished");
+	});
+}
+function insertMaterial(gid){
+	var here="";
+	  try{
+		$.each(_e[gid]["mats"], function(k, v) {
+		  here += "<div class='_icon' style=\"background-image: url('https://97e5ea6e714e0cf2633c01f7a3ab8eee00a8eb35.googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/icon" + _d[this["id"]]["guide_id"] + ".png')\"></div>";
+		}); 
+		$(".xlowBorder.unit." + gid + " > div.evo").html("<h2>Evo Material</h2>" + here + "<div style='clear:both; margin-bottom:5px;'></div>");
+
+	  }catch(e){}
+	  //doneNum++;
+}
+function groupByEvo(){
+	doneNum = 0;
+	lastDone = 0;
+	myVar = setInterval(function(){ checkLoad2() }, 1000);
+	$(".wrap.go").attr("style", "display:block;");
+	$("#loading-tag").html("Grouping Unit ...");
+    $.each(_e, function(k, v) {
+        if (this["rarity"] > 3){		
+			setTimeout(function() {
+				$("#loading-tag").html("Grouping Unit " + k);
+				$(".unit." + _e[k]["evo"]["id"]).append($(".unit." + k));			
+				$(".xlowBorder", $(".unit." + k)).each(function() {
+					$(".unit." + _e[k]["evo"]["id"]).append($(this));			
+				});
+			},doneNum++*10);
+        }
+	});
+}
+
+var qId = 0;
+jQuery('#txt').on('input propertychange paste', function() {
+    clearTimeout ( qId );
+    qId = setTimeout ( "filters()", 500 );
+});
+
+var pId = 0;
+jQuery('#prop').on('blur', function() {
+    clearTimeout ( pId );
+    pId = setTimeout ( "advSearch()", 1000 );
+});
+
+
+
+function advSearch() {
+    if ($("#prop").val() !== "") {
+    var strS = $("#prop").val().split("|");
+    
+     $("div.unit" , "#here").each(function() {
+        found = true;
+        for(var i in strS){
+            var keyword = strS[i];
+            if (keyword.indexOf(":") >= 0){
+                var spec = keyword.split(":");
+                try{
+                if ($("." + spec[0], $(this)).html().toLowerCase().indexOf(spec[1].toLowerCase()) >= 0){}
+                else
+                    found = false;
+                }catch(e){}
+            }
+            else if(keyword.indexOf("*") >= 0){
+                if ($(this).html().toLowerCase().indexOf("span class=\"rarity\">" + keyword.replace("*","")) >= 0){}
+                else
+                    found = false;
+            }else{
+                if ($(this).html().toLowerCase().indexOf(keyword.toLowerCase()) >= 0){}
+                else
+                    found = false;
+            }    
+        }
+    	if (found) {
+			$(this).addClass("visible");
+            //if ($(".t_bb", $(this)).html() === "BB: Loading....");                
+		}else{
+			$(this).removeClass("visible");
+		}	
+	 });
+     rapikan();
+     var sites = "http://sanada000.github.io?p=";
+     $("#link").html("<a href='"+sites + encodeURI($("#prop").val().toLowerCase())+"'>get link</a>");
+    }
+    
+}
+
+function filters() {
+     $("div.unit" , "#here").each(function() {
+        var strS = $("#txt").val().toLowerCase().split("|");
+        found = false;
+        for(var i in strS){
+            if (strS[i].length > 2)
+                if ($("div.name", $(this)).html().toLowerCase().indexOf(strS[i])  >= 0 && strS[i] !== ""){
+                    found = true;
+                }
+        }
+		if (found) {
+			$(this).addClass("visible");
+		}else{
+			$(this).removeClass("visible");
+		}	
+	 });
+     rapikan();
+     var sites = "http://sanada000.github.io?q="
+     $("#link").html("<a href='"+sites + encodeURI($("#txt").val().toLowerCase())+"'>get link</a>");
+}
+function loadPic(id){
+    //$(".img." + id).html("<img style='width:100%;' src='https://googledrive.com/host/0B4hJr8BXxvFZRmc0aVZ2VS1VRFE/unit" + id + ".png'>");
+    var ani = "https://57a969e52eef9955a3ae4f3a6301bc4cde3ee037.googledrive.com/host/0B4hJr8BXxvFZQk1JcFBvT2xEMUk/sprite" + id + ".gif";
+    $.ajax({
+    url:"https://57a969e52eef9955a3ae4f3a6301bc4cde3ee037.googledrive.com/host/0B4hJr8BXxvFZQk1JcFBvT2xEMUk/sprite" + id + ".gif",
+    type:'HEAD',
+    error:
+        function(){
+            
+        },
+    success:
+        function(){
+            $(".unitGif." + id).attr("src","https://57a969e52eef9955a3ae4f3a6301bc4cde3ee037.googledrive.com/host/0B4hJr8BXxvFZQk1JcFBvT2xEMUk/sprite" + id + ".gif");
+        }
+    });
+    
+}
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+function mount() {
+    var q = getParameterByName('q');
+    if ( q !== '') {
+        $("#txt").val(q);
+        filters();
+    }
+    var p = getParameterByName('p');
+    if ( p !== '') {
+        $("#prop").val(p);
+        advSearch();
+    }
+    var s = getParameterByName('s');
+    if ( s !== '') {
+        sort(s);
+    }
+}
+function sort(_attr) {
+	$("#cb2").prop('checked', false);
+    $(".unit").sort(function (a, b) {
+      var contentA =parseInt( $(a).attr(_attr));
+      var contentB =parseInt( $(b).attr(_attr));
+      return (contentA > contentB) ? -1 : (contentA < contentB) ? 1 : 0;
+   }).appendTo("#here");
+    var sites = "http://sanada000.github.io?q=";
+    sites += encodeURI($("#txt").val().toLowerCase());
+    if ($("#prop").val() !== ""){
+        sites = "http://sanada000.github.io?p=";
+        sites += encodeURI($("#prop").val().toLowerCase());
+    }
+    $("#link").html("<a href='"+sites + "&s=" + _attr+"'>get link</a>");
+    setTimeout("rapikan()",500);
+}
+function rapikan(){
+    var mq = window.matchMedia( "(min-width: 64.063em)" );
+    if (mq.matches) {
+        //$("#here").masonry({
+        //  itemSelector: '.xlowBorder.visible'
+        //});
+    }
+}
+</script>
+</html>
+
