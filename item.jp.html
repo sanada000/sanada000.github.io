@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<link type="text/css" rel="stylesheet" href="paper.css" />
+<script src="jquery.js"></script>
+</head>
+<body>
+
+<div class="container">
+  
+  <form onSubmit="return false;" action="#">    
+    <div class="group">      
+      <input id='txt' type="text" required>
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label class="info" tooltip="Elixir|Medulla Gem">Search</label>
+    </div>  
+    <div class="group">    
+        <input type="checkbox" class="cb" id="cb1">        
+        <label class="cb" for="cb1">
+            <span class="check"></span>
+            Load all recipes
+        </label>  
+    </div>  
+    <div class="group">    
+        <input type="checkbox" class="cb" id="cb2">        
+        <label class="cb" for="cb2">
+            <span class="check"></span>
+            <span class="circle"></span>
+            Display Detail
+        </label>  
+    </div>
+  </form>
+  <div style="clear:both">&nbsp;</div>
+  <small style="text-align:right" id="link" onClick="select()"></small><br />
+  
+<div id="here">
+Loading ...
+</div>
+  
+</div>
+</body>
+
+<script type="text/javascript">
+var stats = ["hp","atk","def","rec"];
+var statCols = ["_base","_lord","breaker","anima","guardian","oracle"];
+var _d,trans;
+$.ajaxSetup({ async: false });
+$.getJSON("https://rawgit.com/Deathmax/bravefrontier_data/master/items.json" , function(data) {
+	trans = data;
+});
+$.getJSON("https://rawgit.com/Deathmax/bravefrontier_data/master/jp/items.json" , function(data) {
+    var here = "";
+    _d = data;
+    $.each(data, function(k, v) {
+        var d = this;
+        here += "<div class='lowBorder item " + k + "'>";
+        var rec = "";
+        try {
+            if (typeof d["recipe"] === 'object')
+            rec = "<small onClick='recipe(" + k + ")'>[recipes]</small>";
+        }catch(e) {}
+        var icon = "";
+        try {
+            if ( d["thumbnail"]+"" === "undefined"){}else
+            icon = "<img class='icon' src='http://3.cdn.bravefrontier.gumi.sg/content/item/" + d["thumbnail"] + "' />";            
+        }catch(e) {}
+        var type = "";
+        try {
+            if ( d["sphere type"]+"" === "undefined"){}else
+            type = "<img class='type' src='https://googledrive.com/host/0B4hJr8BXxvFZZVVOZWswdnlnYTg/iconspheretype" + d["sphere type"] + ".png' />";            
+        }catch(e) {}
+        var name = "&middot; <small>";
+		var desc = "";
+		try{
+			name += trans[k]["name"];
+			desc += trans[k]["desc"];
+		}catch(e){}
+        here += "<h1>"+ icon + type + d["name"] + name + " (" + k + ")</small> " + rec + "</h1>";
+        here += "<h2>" + d["desc"] + "<br />" + desc + "</h2>";
+        here += "<table class='prop dempet'>";
+        here += "<tr><th colspan='2'>&nbsp;</th></tr>";
+        here += parseAttr(d, 0);
+        here += "</table>";
+        here += "</div>";
+    });
+    $("#here").html(here);
+    mount();    
+    $("input.cb").attr('checked', false);
+});
+
+function loadRecipes(){
+    $("small").each(function(){
+        $(this).trigger( "click" );
+    }); 
+    $("#txt").val("");
+    $("#cb1").parent().attr("onClick", "return false;");
+    $("#cb1").parent().attr("class", "group disable");
+}
+
+function displayDtl(){
+    if ($("#cb2").is(':checked'))
+    $("table.prop").attr('style', '');
+    else
+    $("table.prop").attr('style', 'display:none;');
+}
+
+jQuery('#cb1').on('click', function() {
+    $("#txt").val("Processing... there might be a little lag...");      
+    setTimeout ( "loadRecipes()", 800 );     
+});
+
+jQuery('#cb2').on('click', function() {
+    setTimeout ( "displayDtl()", 500 );     
+});
+
+function parseAttr(obj, i){
+    var rst = "";
+    var depth = i > 0 ? " class='depth" + i + "'" : "";
+    $.each(obj, function(k, v) {
+        if (k === "desc") {
+        }else if(k === "name"){
+        }else if(k === "id"){
+        }else if(k === "recipe"){
+        }else if(k === "thumbnail"){ 
+        }else if(k === "sphere type"){            
+        }else if(v === null){
+        }else if(typeof v === 'object'){
+            rst += "<tr><th colspan='2'" + depth + ">" + k + "</th></tr>";
+            rst += parseAttr(v, i+1);
+        }else{
+        rst += "<tr><td" + depth + ">" + k + "</td><td" + depth + ">" + v + "</td></tr>"; 
+        }
+    });
+    return rst;
+}
+
+var qId = 0;
+jQuery('#txt').on('input propertychange paste', function() {
+    clearTimeout ( qId );
+    qId = setTimeout ( "filters()", 500 );
+});
+function filters() {     
+     $("div.item" , "#here").each(function() {
+        var strS = $("#txt").val().toLowerCase().split("|");
+        found = false;
+        for(var i in strS){
+              if ($(this).html().toLowerCase().indexOf(strS[i])  >= 0 && strS[i] !== ""){
+                found = true;
+              }
+        }
+    	if (found) {
+			$(this).attr("style", "display:block");
+		}else{
+			$(this).attr("style", "display:none");
+		}	
+	 });
+     var sites = "https://716a6e5661fdc416c2cf19beb7f5f8f7e97f2d33.googledrive.com/host/0B7vqm2NtJxe1SmFQakN5UHEyZEE/item.html?q="
+     $("#link").html(sites + encodeURI($("#txt").val().toLowerCase()));
+}
+function recipe(id){
+    var here="";
+    here += "<h2> Recipe </h2>";
+    here += "<table class='prop dempet'>";
+    here += parseRecipe(_d[id]["recipe"], 1);
+    here += "</table>";
+    $(".item." + id).append(here);    
+    $("small", ".item." + id).remove();
+    return false;
+}
+
+function parseRecipe(obj, i){
+    var rst = "";
+    var depth = i > 0 ? " class='depth" + i + "'" : "";
+    $.each(obj, function(k, v) {
+        if(k === "count"){
+        }else if(k === "id"){
+            var tmp1 = "";
+            try {
+                if (typeof _d[v]["recipe"] === 'object') {
+                    tmp1 = parseRecipe(_d[v]["recipe"], i+1);
+                    depth = i > 0 ? " class='blue depth" + i + "'" : "";
+                }
+            }catch(e){}            
+            var icon = "";
+            try {
+                icon = "<img class='icon small' src='http://3.cdn.bravefrontier.gumi.sg/content/item/" + _d[v]["thumbnail"] + "' />";            
+            }catch(e) {}
+            rst += "<tr><td" + depth + ">" + icon +_d[v]["name"] + "</td><td" + depth + ">" + obj["count"] + "</td></tr>"; 
+            rst += tmp1;
+        }else if(typeof v === 'object'){
+            //rst += "<tr><th colspan='2'" + depth + ">" + k + "</th></tr>";
+            rst += parseRecipe(v, i);            
+        }else{
+        rst += "<tr><td" + depth + ">" + k + "</td><td" + depth + ">" + v + "</td></tr>"; 
+        }
+    });
+    return rst;
+}
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+function mount() {
+    var q = getParameterByName('q');
+    if ( q !== '') {
+        $("#txt").val(q);
+        filters();
+    }
+}
+function select() {
+    var doc = document
+        , text = doc.getElementById('link')
+        , range, selection
+    ;    
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();        
+        range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+</script>
+</html>
