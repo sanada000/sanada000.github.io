@@ -61,7 +61,7 @@
 var stats = ["hp","atk","def","rec"];
 var statCols = ["_base","_lord","breaker","anima","guardian","oracle"];
 var ails = ["injury","weaken","curse","paralysis","poison","sick"];
-var _d,_e,commits;
+var _d,_e,commits, trans;
 var myVar;
 var cdn = getParameterByName('cdn');
 var timeoutNum = 0;
@@ -81,9 +81,14 @@ try{
 }catch(e){    
     _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/jp/info.json?e";
 }
-$.ajaxSetup({ async: true });
+
 if(cdn == 1)
     _url="https://rawgit.com/Deathmax/bravefrontier_data/master/info.json";
+$.getJSON("https://cdn.rawgit.com/Deathmax/bravefrontier_data/" + commits[0]['sha'] + "/info.json", function(data) {
+	$("#loading-tag").html("Preparing translation");
+	trans = data;
+});
+$.ajaxSetup({ async: true });
 $.getJSON(_url , function(data) {
 	$("#loading-tag").html("Loading Units");
     _d = data;
@@ -258,6 +263,17 @@ function writeData(d, cls, k){
         local += "<span class='loader d2'>&nbsp;</span>";
         local += "<span class='loader d3'>&nbsp;</span>";
         local += "<span class='rarity'>"+ d['rarity'] + "&#9733;</span>";
+		try{
+			d["name"] = trans[k]["name"];
+			d["leader skill"]["name"] = trans[k]["leader skill"]["name"];
+			d["leader skill"]["desc"] = trans[k]["leader skill"]["desc"];
+			d["bb"]["name"] = trans[k]["bb"]["name"];
+			d["bb"]["desc"] = trans[k]["bb"]["desc"];
+			d["sbb"]["name"] = trans[k]["sbb"]["name"];
+			d["sbb"]["desc"] = trans[k]["sbb"]["desc"];
+			d["ubb"]["name"] = trans[k]["ubb"]["name"];
+			d["ubb"]["desc"] = trans[k]["ubb"]["desc"];
+		}catch(e){}
         local += "<span class='iden'>" + d["name"].substring(0,1) + "</span>";
         local += "</div>" + d["name"] + " (" + k + ")" + "</h2></div></div>";
         
@@ -573,7 +589,10 @@ function readLeader(d) {
                     if (m.indexOf('hp drain') >= 0){
                         if (m == 'hp drain chance%'){
                             var _rst = "";
-                            _rst = d[k][l][m] + "% absorb ";
+							if (d[k][l][m] !== "100")
+								_rst = d[k][l][m] + "% absorb ";
+							else
+								_rst = "absorb ";
                             if (d[k][l]["hp drain% low"] != d[k][l]["hp drain% high"])
                                 _rst += d[k][l]["hp drain% low"] + "%&nbsp;-&nbsp;";
                             _rst += d[k][l]["hp drain% high"] + "%&nbsp;dmg";
@@ -670,6 +689,8 @@ function readLeader(d) {
                             here = smartStringJoin(here, m.replace("first x turns","") + " " + d[k][l][m]);
                     }else if (m == 'unique elements required'){
                         syarat += " (min " + d[k][l][m] + " elements)";
+					}else if (m.indexOf(' buff requirement') >= 0){
+						syarat += " (" + d[k][l][m] + '%&nbsp;' + m.replace(' buff requirement','').replace('%','') + ")"; 
                     }else if (m == 'elements buffed'){
                         syarat += ' to ' + d[k][l][m];
                     }else if (m.indexOf('% buff') >= 0){
@@ -853,7 +874,7 @@ function readBB(key, title, d){
             tmp += " produce: <b onclick='sort(\"" + key + "\");'>" + d[key]["levels"][9]["max bc generated"] + " random BC </b>";
         }
         here += dmgRatio + tmp + "</span></h2>";
-        //here += "<h3>" + d[key]["desc"] + "</h3>"; - ga kebaca juga
+        here += "<h3>" + d[key]["desc"] + "</h3>"; 
 
         try{
             here +="<h3 class='reverse-hide tech' note='" + title + " action'>";
