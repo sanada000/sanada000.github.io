@@ -103,6 +103,11 @@ $.getJSON(_url , function(data) {
                 this['sbb']['levels'][i]['effects'].sort( function(a,b){
                 return a["effect delay time(ms)/frame"] > b["effect delay time(ms)/frame"];
                 });  
+            }            
+            for(i=0;i<10;i++){
+                this['ubb']['levels'][i]['effects'].sort( function(a,b){
+                return a["effect delay time(ms)/frame"] > b["effect delay time(ms)/frame"];
+                });  
             }
         }catch(e){}
     });
@@ -537,7 +542,8 @@ function elementTag(here){
             .replace(/((<w)|(<f)|(<t)|(<e)|(<d)|(<l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
             .replace(/((<\/w)|(<\/f)|(<\/t)|(<\/e)|(<\/d)|(<\/l))((ater>)|(ire>)|(hunder>)|(arth>)|(ark>)|(ight>))/g,'$1>')
 			.replace(/(\(\d*\))/g, '<sup id="~$1~">~$1~</sup>').replace(/(~\()|(\)~)/g,"")
-			.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-");    
+			.replace(/(\+-\d*\%)/g,'<span class="min">$1</span>').replace("+-","-")
+			.replace("ailments&nbsp;cured poison, weaken, sick, injury, curse, paralysis", "cure all status");    
 }
 function smartStringJoin(s1, s2){
     nonTag = s2.replace(/(\(\d*\))/g, '').replace(/(~\()|(\)~)/g,"").trim();
