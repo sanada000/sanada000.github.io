@@ -115,9 +115,10 @@ $.getJSON(_url , function(data) {
         }else {
             cls ="";
         }
-        if (d["leader skill"] !== undefined)
-            here += "<div class='rep " + d["guide_id"] + "'></div>";
-            setTimeout(function() {writeData(d, cls, k);}, timeoutNum++);
+			if (d["leader skill"] !== undefined){
+            here += "<div class='rep " + k + "'></div>";
+			setTimeout(function() {writeData(d, cls, k);}, timeoutNum++);
+			}
         }
 	});
 
@@ -214,8 +215,9 @@ function setListener(){
 }
 function writeData(d, cls, k){
         var here="";
+		var local="";
         try{
-        var local="";
+        
         local = "<div class='xlowBorder " + d["element"] + " unit " + d["guide_id"] + " " + k + " " + cls + "' "; 
         local += " uid='" + d["guide_id"] + "' gid='" + k + "'  hit='" + d['hits'] + "' bc='" + d['max bc generated'] + "' " 
         try{
@@ -273,6 +275,7 @@ function writeData(d, cls, k){
             local += "<h3>Sorry! can't parse...</h3>";
         }
 		local += "<div class='hide'><table class='LS prop'>";
+		var _k = k;
 		for(var k in d["leader skill"]){
 			if (k=="name") {
 			}else if  (k=="desc") {
@@ -398,7 +401,7 @@ function writeData(d, cls, k){
             setTimeout(function(){readBB('sbb',"SBB", d)},timeoutNum);     
         }
         here += "</div></div>";
-        $(".rep." + d["guide_id"]).replaceWith(here);
+        $(".rep." + _k).replaceWith(here);
         doneNum++;
 }
 function countAI(d){
