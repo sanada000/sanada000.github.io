@@ -66,6 +66,7 @@ var myVar;
 var cdn = getParameterByName('cdn');
 var timeoutNum = 0;
 var doneNum = 0;
+var lastUnit="";
 _url="https://cdn.rawgit.com/Deathmax/bravefrontier_data/05ea6db40b11cff31a04364b4378fa8a530687d8/jp/info.json";
 var sha="";
 $("#loading-tag").html("Getting last data commits");
@@ -118,13 +119,12 @@ $.getJSON(_url , function(data) {
         idx++;
         if (this.rarity > 3){
 		var d = this;
-        var cls = "visible";
+        var cls = "";
         var nextKey = Object.keys(data)[idx];
         nextKey = nextKey === undefined ? '99999' : nextKey;
         if (k.substring(0,2) !== nextKey.substring(0,2)){
-        }else {
-            cls ="";
-        }
+			lastUnit += k + "|"
+		}
         if (d["leader skill"] !== undefined)
             here += "<div class='rep " + d["guide_id"] + "'></div>";
             setTimeout(function() {writeData(d, cls, k);}, timeoutNum++);
@@ -286,19 +286,19 @@ function writeData(d, cls, k){
         local += "<h2 style='margin: 0 0 10px;'>Normal Attack <span onclick='sort(\"hit\");'>" + d['hits'] + " Hit</span>"
             + " <b onclick='sort(\"bc\");'>" + d['max bc generated'] + " BC</b></h2>";
     	local += "<img class='art'></img>";
-		local += "<div class='unit-art'><img class='unitGif " + d["guide_id"] + "'></img><div class='stay-bottom'><h2>" + d["leader skill"]["name"]; + "</h2>";
+		local += "<div class='unit-art'><img class='unitGif " + d["guide_id"] + "'></img><div class='stay-bottom'><h2>LS : " + d["leader skill"]["name"]; + "</h2>";
 		local += "<h3>" + d["leader skill"]["desc"] + "</h3></div></div>";
         try {    	    
             local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["leader skill"])) + "</span></h3>";
         }catch(e){
-            local += "<h3>Sorry! can't parse...</h3>";
+            local += "<h3>Sorry! can't parse LS...</h3>";
         }
 		if (d["extra skill"] !== undefined){
 			try {    	    
-				local += "<h2>Extra Skills : " + JSON.stringify(d["extra skill"]["conditions"]) +  " </h2>";
+				local += "<h2 class='reverse-hide'>Extra Skills : " + JSON.stringify(d["extra skill"]["conditions"]) +  " </h2>";
 				local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["extra skill"])) + "</span></h3>";
 			}catch(e){
-				local += "<h3>Sorry! can't parse...</h3>";
+				local += "<h3>Sorry! can't parse ES...</h3>";
 			}
 		}
 		local += "<div class='hide'><table class='LS prop'>";
@@ -332,7 +332,37 @@ function writeData(d, cls, k){
             local="";
             //console.log("leader");
             return;
+         }
+        here+=local;
+		try { //try parsing Extra Skill
+		local = "<div class='hide'><h2>ES : " + d["extra skill"]["name"] + "</h2><h3>" + d["extra skill"]["desc"] + "</h3><table class='ES prop'>";
+		for(var k in d["extra skill"]){
+			if (k=="desc") {
+    		}else if  (k=="name") {
+    		}else if  (k=="effects") {
+            for(var l in d["extra skill"][k]){
+                for(var m in d["extra skill"][k][l]){
+                    
+                    if (m.indexOf('high') >= 0){
+                        if (d["extra skill"][k][l][m.replace("high", "low")] == undefined)
+                            local += "<tr><td>" + m + "</td><td >" + d["extra skill"][k][l][m] + "</td></tr>";
+                        else
+                            local += "<tr><td>" + m.replace("high", "") + "</td><td >" 
+                                + d["extra skill"][k][l][m.replace("high", "low")] 
+                                + " - " + d["extra skill"][k][l][m] + "</td></tr>";
+                    }else if (m.indexOf('low') >= 0){
+                        if (d["extra skill"][k][l][m.replace("low", "high")] == undefined)
+                            local += "<tr><td>" + m + "</td><td >" + d["extra skill"][k][l][m] + "</td></tr>";
+                    }else
+                        local += "<tr><td>" + m + "</td><td >" + d["extra skill"][k][l][m] + "</td></tr>";
+                }
             }
+			}else{
+				local += "<tr><td>" + k + "</td><td >" + JSON.stringify(d["extra skill"][k]) + "</td></tr>";
+			}
+		} 
+		local += "</table></div>";
+		} catch (e) { local="";}
         here+=local;
 		here +="<div class='lowBorder evo'> </div>";
         try {
@@ -363,6 +393,8 @@ function writeData(d, cls, k){
         for(var k in d){
     		if (k=="bb") {
     		}else if  (k=="sbb") {
+    		}else if  (k=="ubb") {
+    		}else if  (k=="extra skill") {
     		}else if  (k=="stats") {
         	}else if  (k=="name") {
             }else if  (k=="id") {
@@ -595,10 +627,7 @@ function readLeader(d) {
                     if (m.indexOf('hp drain') >= 0){
                         if (m == 'hp drain chance%'){
                             var _rst = "";
-							if (d[k][l][m] !== "100")
-								_rst = d[k][l][m] + "% absorb ";
-							else
-								_rst = "absorb ";
+							_rst = (d[k][l][m] + "% absorb ").replace("100% ", "");
                             if (d[k][l]["hp drain% low"] != d[k][l]["hp drain% high"])
                                 _rst += d[k][l]["hp drain% low"] + "%&nbsp;-&nbsp;";
                             _rst += d[k][l]["hp drain% high"] + "%&nbsp;dmg";
@@ -608,6 +637,18 @@ function readLeader(d) {
                         }else
                             here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
                             //here += (here === "" ? "" : ", ") + m + " " + d[k][l][m];
+					}else if (m.indexOf('dmg% reflect') >= 0){
+						if (m == 'dmg% reflect chance%'){
+							var _rst = "";
+							_rst = (d[k][l][m] + "% reflect ").replace("100% ", "");
+							if (d[k][l]["dmg% reflect low"] != d[k][l]["dmg% reflect high"])
+                                _rst += d[k][l]["dmg% reflect low"] + "%&nbsp;-&nbsp;";
+                            _rst += d[k][l]["dmg% reflect high"] + "%&nbsp;dmg";
+                            here = smartStringJoin(here, _rst);
+						}else if (m == "dmg% reflect low"){      
+						}else if (m == "dmg% reflect high"){     					
+                        }else
+                            here = smartStringJoin(here, m.replace(/ /g,"&nbsp;") + " " + d[k][l][m]);
                     }else if (m.indexOf('based on hp') >= 0 && d[k][l]["buff proportional to hp"] !== undefined && d[k][l][m.replace("extra buff based on hp", "base buff")] !== undefined) {
 						here = smartStringJoin(here, d[k][l][m.replace("extra buff based on hp", "base buff")] + "% to " 
 									+ d[k][l][m] + "%&nbsp;" + m.replace("% extra buff","") + " " + d[k][l]["buff proportional to hp"]);
@@ -641,7 +682,7 @@ function readLeader(d) {
                                 _rst += d[k][l][m.replace(" high", "%")] == 100 ? "" : d[k][l][m.replace(" high", "%")] + "% ";  
                             if (d[k][l][m.replace("high", "low")] != d[k][l][m])
                                 _rst += d[k][l][m.replace("high", "low")] + "&nbsp;to&nbsp;";
-                            _rst += d[k][l][m] + " " + m.replace("high", "");                            
+                            _rst += d[k][l][m] + " " + m.replace("high", "").replace(/ /g,"&nbsp;");                                 
                             here = smartStringJoin(here, _rst);
                         }
                     }else if (m.indexOf('%') >= 0 && d[k][l][m.replace("%", " high")] !== undefined ){
@@ -771,7 +812,7 @@ function readExclude(d,l,list,k){
             if (m.indexOf("turns") >=0){
                 if (d[0]["effects"][l][m.replace(" turns"," high")] !== undefined){
                 }else if (m.indexOf("taunt") >= 0 || m.indexOf("stealth") >= 0)
-                    turn = smartStringJoin(turn, " on " + tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
+                    turn = smartStringJoin(turn, tellIt(m.replace(" turns","") + " ", d,l,m,  " turns" ));
                 else //if(m.indexOf("buff") >= 0 || '% converted turns,resist status ails turns, bc fill when attacked turns (38)'.indexOf(m) >= 0)
                     turn = tellIt(" ", d,l,m, " turns ");
                 /*else if(m.indexOf('dmg% reduction turns') >= 0)
@@ -852,7 +893,7 @@ function readExclude(d,l,list,k){
         }
     }
     if (turn + target !== "" ) {
-        here = prolog + here + turn + target;
+        here = prolog + here + ( prolog+here !== "" && (turn.indexOf("taunt") >= 0 || turn.indexOf("stealth") >= 0) ? " on " : " " ) +turn + target;
         target = "";
         turn = "";
         prolog = "";
@@ -1160,7 +1201,10 @@ function mount() {
     if ( q !== '') {
         $("#txt").val(q);
         filters();
-    }
+    }else if (lastUnit !== '') {
+        $("#txt").val(lastUnit);
+        filters();
+	}
     var p = getParameterByName('p');
     if ( p !== '') {
         $("#prop").val(p);
