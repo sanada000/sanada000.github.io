@@ -289,14 +289,14 @@ function writeData(d, cls, k){
 		local += "<div class='unit-art'><img class='unitGif " + d["guide_id"] + "'></img><div class='stay-bottom'><h2>LS : " + d["leader skill"]["name"]; + "</h2>";
 		local += "<h3>" + d["leader skill"]["desc"] + "</h3></div></div>";
         try {    	    
-            local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["leader skill"])) + "</span></h3>";
+            local += "<h3 class='reverse-hide tech' note='Leader skill'><span phase='2'>" + elementTag(readLeader(d["leader skill"])) + "</span></h3>";
         }catch(e){
             local += "<h3>Sorry! can't parse LS...</h3>";
         }
 		if (d["extra skill"] !== undefined){
 			try {    	    
 				local += "<h2 class='reverse-hide'>Extra Skills : " + JSON.stringify(d["extra skill"]["conditions"]) +  " </h2>";
-				local += "<h3 class='reverse-hide tech' note=''><span phase='2'>" + elementTag(readLeader(d["extra skill"])) + "</span></h3>";
+				local += "<h3 class='reverse-hide tech' note='Extra skill'><span phase='2'>" + elementTag(readLeader(d["extra skill"])) + "</span></h3>";
 			}catch(e){
 				local += "<h3>Sorry! can't parse ES...</h3>";
 			}
@@ -497,9 +497,9 @@ function parseLv(d,l,m){
                     here += (here === "" ? "" : ", ");
                     if (c1["proc chance%"] !== undefined)
                             if(c1["proc chance%"] === c2["proc chance%"])
-                                here += c1["proc chance%"] +"% chance ";
+                                here += (c1["proc chance%"] +"%&nbsp;chance ").replace("100%&nbsp;chance ", "");
                             else
-                                here += "(" + c1["proc chance%"] + "&nbsp;-&nbsp;" + c2["proc chance%"] +")% chance ";
+                                here += "(" + c1["proc chance%"] + "&nbsp;-&nbsp;" + c2["proc chance%"] +")%&nbsp;chance ";
                         if (c1[_p] === c2[_p])
                             here += c1[_p] + "% " + _p.replace("% buff","");
                         else
@@ -627,7 +627,7 @@ function readLeader(d) {
                     if (m.indexOf('hp drain') >= 0){
                         if (m == 'hp drain chance%'){
                             var _rst = "";
-							_rst = (d[k][l][m] + "% absorb ").replace("100% ", "");
+							_rst = (d[k][l][m] + "%&nbsp;chance to absorb ").replace("100%&nbsp;chance to ", "");
                             if (d[k][l]["hp drain% low"] != d[k][l]["hp drain% high"])
                                 _rst += d[k][l]["hp drain% low"] + "%&nbsp;-&nbsp;";
                             _rst += d[k][l]["hp drain% high"] + "%&nbsp;dmg";
@@ -640,7 +640,7 @@ function readLeader(d) {
 					}else if (m.indexOf('dmg% reflect') >= 0){
 						if (m == 'dmg% reflect chance%'){
 							var _rst = "";
-							_rst = (d[k][l][m] + "% reflect ").replace("100% ", "");
+							_rst = (d[k][l][m] + "%&nbsp;chance to reflect ").replace("100%&nbsp;chance to ", "");
 							if (d[k][l]["dmg% reflect low"] != d[k][l]["dmg% reflect high"])
                                 _rst += d[k][l]["dmg% reflect low"] + "%&nbsp;-&nbsp;";
                             _rst += d[k][l]["dmg% reflect high"] + "%&nbsp;dmg";
@@ -657,7 +657,7 @@ function readLeader(d) {
                     }else if (m.indexOf('dmg% to hp% when attacked') >= 0){
                             if (m == "dmg% to hp% when attacked chance%"){
                             var _rst = "";
-                            _rst = d[k][l]["dmg% to hp% when attacked chance%"] + "%&nbsp;recover ";
+                            _rst = d[k][l]["dmg% to hp% when attacked chance%"] + "%&nbsp;chance to recover ";
                             if (d[k][l]["dmg% to hp% when attacked low"] != d[k][l]["dmg% to hp% when attacked high"])
                                 _rst += d[k][l]["dmg% to hp% when attacked low"] + "%&nbsp;-&nbsp;";
                             _rst += d[k][l]["dmg% to hp% when attacked high"] +"%&nbsp;dmg&nbsp;taken";
@@ -749,6 +749,8 @@ function readLeader(d) {
                         here = smartStringJoin(here, "+" + d[k][l][m] + " " + m.replace("per turn", "/turn"));
                     }else if (m.indexOf(' spark') >= 0){
                         here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("%",""));
+					}else if (m.indexOf('dmg% for ') >= 0){
+						here = smartStringJoin(here, "+" + d[k][l][m] + "% " + m.replace("dmg% for ","") + "&nbsp;dmg");
                     }else if (m.indexOf('%') >= 0){
                         here = smartStringJoin(here, d[k][l][m] + "% " + m.replace("%","").replace(/ /g,"&nbsp;"));
                     }else
