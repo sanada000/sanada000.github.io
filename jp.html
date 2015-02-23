@@ -780,6 +780,8 @@ function readExclude(d,l,list,k){
             }
             if (m === 'target area'){
                 if (d[0]["effects"][l]["target type"] === "party"){
+					if (d[0]["effects"][l][m] === "single")
+						target += " to&nbsp;single party ";
                 }else if (d[0]["effects"][l]["target type"] === "self")
                     target += " to&nbsp;self ";
                 else if (d[0]["effects"][l]["random attack"])
@@ -789,7 +791,13 @@ function readExclude(d,l,list,k){
                 else
                     target += tellIt(" ", d,l,m,add);
                 add = "";
-            }  
+            }
+            if (m === 'hit increase/hit'){
+				var dmg = "";
+				if (d[0]["effects"][l]["dmg% buff on extra hits"] !== undefined)
+					dmg = "(" + d[0]["effects"][l]["dmg% buff on extra hits"] + "% dmg buff )";
+                here = smartStringJoin(here, tellIt("+", d,l,m," hit/hit " + dmg));					
+            }   
             if (m === 'elements added'){
                 here = smartStringJoin(here, tellIt("add ", d,l,m," elements "));
             } 
@@ -823,7 +831,7 @@ function readExclude(d,l,list,k){
                     turn = tellIt(" ", d,l,m, " " + m.replace(/ /g,"&nbsp;") + " ");
                     */
             } 
-            if (m.indexOf("% buff") >=0){
+            if (m.indexOf("% buff") >=0  && m !== 'dmg% buff on extra hits'){
                 if (m === 'atk% buff (46)' && d[0]["effects"][l]['converted attribute'] !== undefined){ 
                 }else if ($.inArray(m.replace("% buff", ""), ails) >= 0) {
 					here = smartStringJoin(here, tellIt("add ", d,l,m, "% " + m.replace("% buff", "") + " to atk"));
@@ -833,16 +841,17 @@ function readExclude(d,l,list,k){
             if (m.indexOf("rec added%") >=0){
                 here = smartStringJoin(here, tellIt("+", d,l,m, "% rec" + m.replace("rec added% ", "")));
             }   
-            if (m.indexOf('%') >= 0 && m.indexOf('bb ') >= 0 && m !== 'bb atk%' ){
+            if (m.indexOf('%') >= 0 && m.indexOf('bb ') >= 0 && m !== 'bb atk%'  && m !== 'dmg% buff on extra hits'){
                 here = smartStringJoin(here, tellIt("+", d,l,m, '% ' + m.replace("bb ", "").replace("%", "")));
             }           
             if (m.indexOf(" high") >=0){
                 if (d[0]["effects"][l][m.replace(" high", "%")] !== undefined){
                     here += d[0]["effects"][l][m.replace(" high", "%")] == 100 ? "" : tellIt(" ", d,l,m.replace(" high", "%"), "% ");
                 }
+				here += m.replace(" high", "") + " ";
                 if (d[0]["effects"][l][m.replace(" high", " low")] !== undefined ){
                     if (d[0]["effects"][l][m.replace(" high", " low")] != d[0]["effects"][l][m])
-                        here += tellIt(m.replace(" high", "") + " ", d,l,m.replace(" high", " low"), " to ");
+                        here += tellIt("", d,l,m.replace(" high", " low"), " to ");
                     here += tellIt("", d,l,m, "");
                 }else
                     here += tellIt("", d,l,m, "");
@@ -868,6 +877,7 @@ function readExclude(d,l,list,k){
             }else if (m === 'shield element'){ 
             }else if (m === 'shield hp'){ 
             }else if (m === 'element buffed'){ 
+            }else if (m === 'hit increase/hit'){ 
             }else if (m === 'increase bb gauge gradual'){
             }else if (m === 'increase bb gauge'){
             }else if (m === 'hits'){             
