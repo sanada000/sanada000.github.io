@@ -16,6 +16,7 @@
 }
 
 .header {
+  font-family: 'Open Sans', sans-serif;
   position: fixed;
   height: 40px;
   width: 100%;
@@ -33,9 +34,12 @@
 }
 .header.L .logo, .header:hover .logo {
   height: 80px;
+  background-size: 100%;
 }
 .header .logo {
-  background-color: rgba(120, 0, 0, 0.5);
+  background: url("http://sanada000.github.io/my.FM/images/logo_FM.png") 50% 75% no-repeat;
+  background-size: 50%;
+  background-color: transparent;
   height: 40px;
   float: left;
   width: 120px;
@@ -47,7 +51,7 @@
 .header .rootMenu {
   position: relative;
   background: #448;
-  background: linear-gradient(#449 60%, #338);
+  background: linear-gradient(#3b60ae 60%, #304f8f);
   height: 40px;
   display: block;
   margin-left: 120px;
@@ -63,7 +67,7 @@
   color: #fff;
 }
 .header .rootMenu ul.menu > li {
-  padding: 0 30px;
+  padding: 0 20px;
   font-weight: bold;
   border-right: solid 1px #66A;
   height: 40px;
@@ -95,7 +99,7 @@
 }
 .header .rootMenu ul.menu > li ul li {
   display: inline-block;
-  color: #449;
+  color: #3a61ae;
   transition: 0.8s;
   padding: 0 20px;
 }
@@ -110,7 +114,7 @@
   right: 0;
   top: 0;
   display: block;
-  background: rgba(120, 0, 0, 0.5);
+  background: transparent;
   height: 40px;
 }
 .header .rootMenu .rightNav ul {
@@ -128,7 +132,9 @@
 }
 .header .rootMenu .rightNav ul li a {
   text-decoration: none;
-  font-size: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  line-height: 12px;
   color: #aaa;
 }
 .header .rootMenu .rightNav ul li a.active {
@@ -138,7 +144,7 @@
 .header .rootMenu .rightNav ul li img.icon {
   display: inline-block;
   float: right;
-  border: 1px solid #900;
+  border: none;
   width: 20px;
   height: 20px;
   margin: 0 0 0 10px;
@@ -172,7 +178,7 @@
 }
 .barmenu ul li img.icon {
   display: block;
-  border: 1px solid #900;
+  border: none;
   width: 30px;
   height: 30px;
   margin: 0px auto;
@@ -206,9 +212,10 @@
   margin-top: 20px;
   width: 100%;
   min-width: 980px;
-  background: #449;
+  background: #3b60ae;
   padding: 10px 0;
   color: #fff;
+  font-family: 'Open Sans', sans-serif;
   font-size: 10pt;
 }
 .footer h2 {
@@ -223,7 +230,7 @@
 }
 .footer .col-10 img.icon {
   display: block;
-  border: 1px solid #900;
+  border: none;
   width: 30px;
   height: 30px;
   margin-right: 10px;
@@ -231,7 +238,7 @@
 }
 .footer .col-10 .c {
   margin-bottom: 10px;
-  background-color: rgba(120, 0, 0, 0.5);
+  background-color: transparent;
   float: left;
   display: inline-block;
 }
@@ -269,9 +276,10 @@
 .header.L, .header:hover {
   height: auto;
 }
-.header a.logo {
+.header img.logo {
   height: 80px;
   float: none;
+  border-width: 0px;
 }
 .header .rootMenu {
   margin-left: 0px;
@@ -296,7 +304,6 @@
 }
 .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
   padding-left: 15px;
-  background: #55A;
 }
 .header .rootMenu ul.menu > li:after {
   display: none;
@@ -304,7 +311,7 @@
 .header .rootMenu ul.menu > li ul {
   position: static;
   width: 100%;
-  background-color: #449;
+  background-color: #3a61ae;
   height: 0px;
 }
 .header .rootMenu ul.menu > li ul li {
@@ -313,7 +320,7 @@
   border-color: #aaf;
 }
 .header .rootMenu ul.menu > li ul li:hover {
-  background-color: #55A;
+  background-color: #3a61ae;
   color: #fff;
 }
 .header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
@@ -335,6 +342,7 @@
   padding: 5px 5px 0;
   text-align: right;
   border-right: none;
+  color: #304f8f;
 }
 .header .rootMenu .rightNav ul li img.icon {
   margin-top: -4px;
@@ -342,6 +350,9 @@
 .header .rootMenu .rightNav ul li img.icon.left {
   float: right;
   margin: 0 0 0 10px;
+}
+.header .rootMenu .rightNav ul li a.active {
+  color: #304f8f;
 }
 
 .barmenu {
@@ -357,6 +368,7 @@
 .barmenu ul li {
   display: inline-block;
   padding: 5px;
+  border-width: 0px;
 }
 
 .content {
@@ -369,7 +381,8 @@
   margin-bottom: 50px;
 }
 .footer .col-10 {
-  width: 320px;
+  width: 90%;
+  min-width: 320px;
 }
 .footer .col-10 .c1 {
   width: 40%;
@@ -395,7 +408,7 @@
     border-bottom: none;
     padding: 0 30px;
     font-weight: bold;
-    border-right: solid 1px #66A;
+    border-right: solid 1px #6b95eb;
     height: 40px;
     width: auto;
   }
@@ -430,7 +443,7 @@
   }
   .header .rootMenu ul.menu > li ul li {
     display: inline-block;
-    color: #449;
+    color: #3a61ae;
     transition: 0.8s;
     padding: 0 20px;
   }
@@ -471,16 +484,24 @@
   .header.L .logo, .header:hover .logo {
     height: 80px;
   }
-  .header a.logo {
+  .header img.logo {
     height: 40px;
+    border-width: 1px;
     float: left;
   }
   .header .rootMenu {
+    height: 40px;
     margin-left: 120px;
   }
   .header .rootMenu ul li {
     display: inline-block;
     border-bottom: none;
+  }
+  .header .rootMenu ul.menu > li {
+    padding: 0 10px;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 10px;
   }
   .header .rootMenu .rightNav {
     top: 0;
@@ -494,6 +515,7 @@
     padding: 0 10px 0;
     border-right: dotted 2px rgba(255, 255, 255, 0.4);
     text-align: left;
+    color: #fff;
   }
   .header .rootMenu .rightNav ul li:last-child {
     border-right: none;
@@ -504,6 +526,12 @@
   .header .rootMenu .rightNav ul li img.icon.left {
     float: left;
     margin: 0 10px 0 0;
+  }
+  .header .rootMenu .rightNav ul li a {
+    color: #aaa;
+  }
+  .header .rootMenu .rightNav ul li a.active {
+    color: #fff;
   }
 
   .barmenu {
@@ -518,6 +546,7 @@
   .barmenu ul li {
     display: block;
     padding: 10px 0;
+    border-width: 1px;
   }
 
   .content {
@@ -527,8 +556,19 @@
 }
 /* Larger than desktop */
 @media (min-width: 1000px) {
+  .header .rootMenu ul.menu > li {
+    padding: 0 30px;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 30px;
+  }
+
   .footer {
     margin-bottom: 0;
+    font-size: 9pt;
+  }
+  .footer h2 {
+    font-size: 10pt;
   }
   .footer .col-10 {
     width: 90%;
@@ -547,6 +587,7 @@
   }
 }
 
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
@@ -562,25 +603,25 @@
 </head>
 <body>
 
-<div class="header L"><a class="logo">Logo FM</a>
+<div class="header L"><img class="logo"/>
   <div class="rootMenu">
     <ul class="menu">
-      <li>menu1
+      <li class="active">HOME
         <ul>
-          <li>Package</li>
+          <li>Packages</li>
           <li>Fastnet</li>
           <li>HomeCable HD</li>
           <li>FM GO</li>
           <li>What's On</li>
         </ul>
       </li>
-      <li class="active">menu2
+      <li>ENTERPRISE
         <ul>
           <li>Help</li>
           <li>Test</li>
         </ul>
       </li>
-      <li>menu3
+      <li>CORPORATE
         <ul>
           <li>HomeCable HD</li>
           <li>FM GO</li>
@@ -590,22 +631,22 @@
     </ul>
     <div class="rightNav">
       <ul>
-        <li><span>My First Media<img class="icon"/></span></li>
-        <li><span>Jakarta<img class="icon"/></span></li>
-        <li><span><img class="icon left"/><a class="active">EN</a><a>  |   </a><a>ID</a></span></li>
+        <li><span>My First Media<img src="http://sanada000.github.io/my.FM/images/ic_user_s.png" class="icon"/></span></li>
+        <li><span>Jakarta<img src="http://sanada000.github.io/my.FM/images/ic_loc_s.png" class="icon"/></span></li>
+        <li><span><img src="http://sanada000.github.io/my.FM/images/ic_balon_s.png" class="icon left"/><a class="active">EN</a><a>  |   </a><a>ID</a></span></li>
       </ul>
     </div>
   </div>
 </div>
 <div class="barmenu">
   <ul>
-    <li><img src="images/ic_search.png" class="icon"/></li>
-    <li><img src="images/ic_plus.png" class="icon"/><span>SUBSCRIBE</span></li>
-    <li><img src="images/ic_wired.png" class="icon"/><span>UPGRADE</span></li>
-    <li><img src="images/ic_FMGO.png" class="icon"/><span>FM GO</span></li>
-    <li><img src="images/ic_user.png" class="icon"/><span>MY FM</span></li>
-    <li><img src="images/ic_headset.png" class="icon"/><span>SUPPORT</span></li>
-    <li><img src="images/ic_mail.png" class="icon"/><span>CONTACT US</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_search.png" class="icon"/></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_plus.png" class="icon"/><span>SUBSCRIBE</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_wired.png" class="icon"/><span>UPGRADE</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_FMGO.png" class="icon"/><span>FM GO</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_user.png" class="icon"/><span>MY FM</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_headset.png" class="icon"/><span>SUPPORT</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_mail.png" class="icon"/><span>CONTACT US</span></li>
   </ul>
 </div>
 <div class="content">
