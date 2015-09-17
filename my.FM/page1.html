@@ -2,6 +2,7 @@
 <html>
 <head><title>Mockup 1</title>
 <style>
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
 * {
   vertical-align: baseline;
   font-weight: inherit;
@@ -18,6 +19,7 @@
   position: fixed;
   height: 40px;
   width: 100%;
+  min-width: 320px;
   background: #fff;
   top: 0px;
   left: 0px;
@@ -119,7 +121,7 @@
   height: 20px;
   line-height: 20px;
   padding: 0 10px 0;
-  border-right: solid 1px rgba(255, 255, 255, 0.3);
+  border-right: dotted 2px rgba(255, 255, 255, 0.4);
 }
 .header .rootMenu .rightNav ul li:last-child {
   border-right: none;
@@ -151,19 +153,22 @@
   z-index: 1000;
   right: 0px;
   top: 40px;
-  width: 50px;
-  background: #449;
+  width: 60px;
+  background: #3b60ae;
   height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
 }
 .barmenu ul {
   display: block;
-  width: 50px;
+  width: 60px;
   padding: 0;
   margin: 0;
 }
 .barmenu ul li {
   display: block;
   padding: 10px 0;
+  border-bottom: 1px solid #6c94eb;
 }
 .barmenu ul li img.icon {
   display: block;
@@ -173,7 +178,7 @@
   margin: 0px auto;
 }
 .barmenu ul li:hover {
-  background: #88f;
+  background: #6c94eb;
 }
 .barmenu ul li span {
   text-align: center;
@@ -181,7 +186,7 @@
   display: block;
   width: 100%;
   line-height: 14px;
-  font-size: 10pt;
+  font-size: 7pt;
 }
 
 .content {
@@ -225,6 +230,7 @@
   float: left;
 }
 .footer .col-10 .c {
+  margin-bottom: 10px;
   background-color: rgba(120, 0, 0, 0.5);
   float: left;
   display: inline-block;
@@ -252,6 +258,293 @@
 .footer .col-10 .c2 {
   width: 19%;
   padding: 0 0.4999%;
+}
+
+/** set To Smaller first **/
+.header {
+  width: 100%;
+  position: static;
+  height: auto;
+}
+.header.L, .header:hover {
+  height: auto;
+}
+.header a.logo {
+  height: 80px;
+  float: none;
+}
+.header .rootMenu {
+  margin-left: 0px;
+  height: auto;
+}
+.header .rootMenu ul {
+  display: block;
+}
+.header .rootMenu ul li {
+  display: block;
+  border-bottom: 1px solid #fff;
+}
+.header .rootMenu ul li:last-child {
+  border-bottom: none;
+}
+.header .rootMenu ul.menu > li {
+  border-right: none;
+  height: auto;
+  padding-left: 10px;
+  width: 100%;
+  transition: 0.5s;
+}
+.header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+  padding-left: 15px;
+  background: #55A;
+}
+.header .rootMenu ul.menu > li:after {
+  display: none;
+}
+.header .rootMenu ul.menu > li ul {
+  position: static;
+  width: 100%;
+  background-color: #449;
+  height: 0px;
+}
+.header .rootMenu ul.menu > li ul li {
+  display: block;
+  color: #fff;
+  border-color: #aaf;
+}
+.header .rootMenu ul.menu > li ul li:hover {
+  background-color: #55A;
+  color: #fff;
+}
+.header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
+  display: block;
+  height: auto;
+}
+.header .rootMenu ul.menu > li:hover ul {
+  z-index: 100;
+}
+.header .rootMenu .rightNav {
+  top: -80px;
+  height: auto;
+}
+.header .rootMenu .rightNav ul {
+  height: auto;
+  margin: 0px;
+}
+.header .rootMenu .rightNav ul li {
+  padding: 5px 5px 0;
+  text-align: right;
+  border-right: none;
+}
+.header .rootMenu .rightNav ul li img.icon {
+  margin-top: -4px;
+}
+.header .rootMenu .rightNav ul li img.icon.left {
+  float: right;
+  margin: 0 0 0 10px;
+}
+
+.barmenu {
+  top: auto;
+  bottom: 0px;
+  width: 100%;
+  height: 55px;
+}
+.barmenu ul {
+  display: inline-block;
+  width: auto;
+}
+.barmenu ul li {
+  display: inline-block;
+  padding: 5px;
+}
+
+.content {
+  width: 80%;
+  margin-top: 0px;
+}
+
+.footer {
+  min-width: 320px;
+  margin-bottom: 50px;
+}
+.footer .col-10 {
+  width: 320px;
+}
+.footer .col-10 .c1 {
+  width: 40%;
+  padding: 0 4.99%;
+}
+.footer .col-10 .c2 {
+  width: 90%;
+  padding: 0 4.999%;
+}
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+  .header .rootMenu {
+    height: 80px;
+    margin-left: 0px;
+  }
+  .header .rootMenu ul {
+    display: inline-block;
+    border-bottom: none;
+  }
+  .header .rootMenu ul.menu > li {
+    display: inline-block;
+    border-bottom: none;
+    padding: 0 30px;
+    font-weight: bold;
+    border-right: solid 1px #66A;
+    height: 40px;
+    width: auto;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 30px;
+    background: transparent;
+  }
+  .header .rootMenu ul.menu > li:last-child {
+    border-right: none;
+  }
+  .header .rootMenu ul.menu > li:after {
+    content: " ";
+    display: block;
+    background: #fff;
+    width: 10px;
+    height: 10px;
+    margin: 5px auto;
+    transition: 0.3s;
+    transform: rotate(45deg);
+  }
+  .header .rootMenu ul.menu > li:hover:after, .header .rootMenu ul.menu > li.active:after {
+    margin-top: -5px;
+  }
+  .header .rootMenu ul.menu > li ul {
+    position: absolute;
+    display: none;
+    z-index: 0;
+    background: #fff;
+    width: 1000px;
+    left: 0px;
+    top: 40px;
+  }
+  .header .rootMenu ul.menu > li ul li {
+    display: inline-block;
+    color: #449;
+    transition: 0.8s;
+    padding: 0 20px;
+  }
+  .header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
+    display: block;
+  }
+  .header .rootMenu ul.menu > li:hover ul {
+    z-index: 100;
+  }
+
+  .footer {
+    margin-bottom: 0;
+  }
+  .footer .col-10 {
+    width: 80%;
+  }
+  .footer .col-10 .c1 {
+    width: 24%;
+    padding: 0 0.49%;
+  }
+  .footer .col-10 .c2 {
+    width: 49%;
+    padding: 0 0.4999%;
+  }
+  .footer .col-10 .c2.blank {
+    width: 99%;
+  }
+}
+/* Larger than tablet */
+@media (min-width: 750px) {
+  .header {
+    position: fixed;
+    height: 40px;
+  }
+  .header.L, .header:hover {
+    height: 80px;
+  }
+  .header.L .logo, .header:hover .logo {
+    height: 80px;
+  }
+  .header a.logo {
+    height: 40px;
+    float: left;
+  }
+  .header .rootMenu {
+    margin-left: 120px;
+  }
+  .header .rootMenu ul li {
+    display: inline-block;
+    border-bottom: none;
+  }
+  .header .rootMenu .rightNav {
+    top: 0;
+    height: 40px;
+  }
+  .header .rootMenu .rightNav ul {
+    height: 20px;
+    margin: 10px 0;
+  }
+  .header .rootMenu .rightNav ul li {
+    padding: 0 10px 0;
+    border-right: dotted 2px rgba(255, 255, 255, 0.4);
+    text-align: left;
+  }
+  .header .rootMenu .rightNav ul li:last-child {
+    border-right: none;
+  }
+  .header .rootMenu .rightNav ul li img.icon {
+    margin: 0 0 0 10px;
+  }
+  .header .rootMenu .rightNav ul li img.icon.left {
+    float: left;
+    margin: 0 10px 0 0;
+  }
+
+  .barmenu {
+    top: 40px;
+    width: 60px;
+    height: 100%;
+  }
+  .barmenu ul {
+    display: block;
+    width: 60px;
+  }
+  .barmenu ul li {
+    display: block;
+    padding: 10px 0;
+  }
+
+  .content {
+    max-width: 960px;
+    margin-top: 80px;
+  }
+}
+/* Larger than desktop */
+@media (min-width: 1000px) {
+  .footer {
+    margin-bottom: 0;
+  }
+  .footer .col-10 {
+    width: 90%;
+    max-width: 1024px;
+  }
+  .footer .col-10 .c1 {
+    width: 9%;
+    padding: 0 0.49%;
+  }
+  .footer .col-10 .c2 {
+    width: 19%;
+    padding: 0 0.4999%;
+  }
+  .footer .col-10 .c2.blank {
+    width: 19%;
+  }
 }
 
 </style>
@@ -306,9 +599,13 @@
 </div>
 <div class="barmenu">
   <ul>
-    <li><img style="height:18px;" class="icon"/></li>
-    <li><img class="icon"/><span>menu</span></li>
-    <li><img class="icon"/><span>menu 2</span></li>
+    <li><img src="images/ic_search.png" class="icon"/></li>
+    <li><img src="images/ic_plus.png" class="icon"/><span>SUBSCRIBE</span></li>
+    <li><img src="images/ic_wired.png" class="icon"/><span>UPGRADE</span></li>
+    <li><img src="images/ic_FMGO.png" class="icon"/><span>FM GO</span></li>
+    <li><img src="images/ic_user.png" class="icon"/><span>MY FM</span></li>
+    <li><img src="images/ic_headset.png" class="icon"/><span>SUPPORT</span></li>
+    <li><img src="images/ic_mail.png" class="icon"/><span>CONTACT US</span></li>
   </ul>
 </div>
 <div class="content">
@@ -342,7 +639,7 @@
       <h2>header 4</h2>content
       content 2
     </div>
-    <div class="c c2"> -</div>
+    <div class="c c2 blank"> -</div>
     <div class="c c2 complex"><img class="icon"/>
       <div class="forms">
         normal <br/> <h2>Bold</h2>
