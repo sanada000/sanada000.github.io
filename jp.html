@@ -880,6 +880,7 @@ function readExclude(d,l,list,k){
             }else if (m === 'hit increase/hit'){ 
             }else if (m === 'increase bb gauge gradual'){
             }else if (m === 'increase bb gauge'){
+			}else if (m === 'proc id'){
             }else if (m === 'hits'){             
             }else if (m.indexOf("resist") >=0 && m.indexOf("turns") < 0){ 
                 if (d[0]["effects"][l][m] == 100)
@@ -945,6 +946,7 @@ function readBB(key, title, d){
         for(var l in d[key]["levels"][0]["effects"]){ 
             var content = readExclude(d[key]["levels"],l, "effect delay time(ms)/frame bb flat atk", d[key]);
             var ph = d[key]["levels"][0]["effects"][l]["effect delay time(ms)/frame"];
+			var procId = d[key]["levels"][0]["effects"][l]["proc id"];
             if (tmp.indexOf("hit") >= 0 && tmp.indexOf("atk") >= 0)
                 if (phase !== ph)
                     seq = 2;
@@ -959,14 +961,14 @@ function readBB(key, title, d){
                 if (content.indexOf("hit") >= 0 && content.indexOf("atk") >= 0)
                 phase = ph;
                 if ( ph === undefined)
-                    und += "<span phase='" + (seq != 1 ? '0' : '1') + "' delay='-'>" + content + "</span>";
+                    und += "<span phase='" + (seq != 1 ? '0' : '1') + "' delay='-' procId='" + procid + "' >" + content + "</span>";
                 else
-                    tmp += "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>";
+                    tmp += "<span phase='" + seq + "' delay='" + ph + "' procId='" + procid + "'>" + content + "</span>";
             }else{
                 if (tmp.indexOf("hit") >= 0 && tmp.indexOf("atk") >= 0){
-                    tmp = "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>" + tmp;                    
+                    tmp = "<span phase='" + seq + "' delay='" + ph + "' procId='" + procid + "'>" + content + "</span>" + tmp;                    
                 }else{
-                    tmp += "<span phase='" + seq + "' delay='" + ph + "'>" + content + "</span>";                    
+                    tmp += "<span phase='" + seq + "' delay='" + ph + "' procId='" + procid + "'>" + content + "</span>";                    
                 }
             }                      
         }        
