@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html>
-<head><title>Mockup 1</title>
+<head><title>Mockup 1 v0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
 * {
@@ -426,8 +428,28 @@ display: block;
   width: 19%;
   padding: 0 0.4999%;
 }
+.footer .col-10.socmed .icon {
+  background: url("http://sanada000.github.io/my.FM/images/socmed_slide.png");
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+}
+.footer .col-10.socmed .icon.fb {
+  background-position: 2px 1px;
+}
+.footer .col-10.socmed .icon.youtube {
+  background-position: 31px 1px;
+}
+.footer .col-10.socmed .icon.twitter {
+  background-position: 96px 1px;
+}
+.footer .col-10.socmed .icon.google {
+  background-position: 62px 1px;
+}
+
 
 /** set To Smaller first **/
+@media only screen and (min-width: 1em) {
 .header {
   width: 100%;
   position: static;
@@ -557,25 +579,7 @@ display: block;
   width: 90%;
   padding: 0 4.999%;
 }
-.footer .col-10.socmed .icon {
-  background: url("http://sanada000.github.io/my.FM/images/socmed_slide.png");
-  width: 30px;
-  height: 30px;
-  display: inline-block;
 }
-.footer .col-10.socmed .icon.fb {
-  background-position: 2px 1px;
-}
-.footer .col-10.socmed .icon.youtube {
-  background-position: 31px 1px;
-}
-.footer .col-10.socmed .icon.twitter {
-  background-position: 96px 1px;
-}
-.footer .col-10.socmed .icon.google {
-  background-position: 62px 1px;
-}
-
 /* Larger than phablet */
 @media only screen and (min-width: 30em) {
   .header .rootMenu {
@@ -863,7 +867,7 @@ display: block;
   </div>
   <div class="page">
     <h1>myFM > <b>ACCOUNTS</b></h1>Suggestion Accounts <br /><a class="button">ADD OTHER ACCOUNT</a>
-    <table>
+    <table width="600px">
       <tr>
         <th>NO.</th>
         <th>BILLER</th>
@@ -927,7 +931,7 @@ display: block;
       </tr>
     </table>
     <div class="separator"> </div>My Accounts
-    <table>
+    <table width="600px">
       <tr>
         <th>NO.</th>
         <th>BILLER</th>
