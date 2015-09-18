@@ -231,9 +231,9 @@
 .footer .col-10 img.icon {
   display: block;
   border: none;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+  width: 35px;
+  height: 35px;
+  margin-right: 5px;
   float: left;
 }
 .footer .col-10 .c {
@@ -251,12 +251,47 @@
 }
 .footer .col-10 .c.complex .forms {
   display: block;
-  float: right;
+  float: left;
   margin-left: 40px;
 }
-.footer .col-10 .c.complex .textbox {
-  width: 99%;
-  border: 1px solid #777;
+.footer .col-10 .c.complex .ddl {
+  display: block;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 8pt;
+  height: 20px;
+  margin-bottom: 40px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.footer .col-10 .c.complex .ddl:hover {
+  height: 60px;
+  margin-bottom: 0px;
+}
+.footer .col-10 .c.complex .ddl:after {
+  content: " ";
+  background: url("http://sanada000.github.io/my.FM/images/ic_down.png");
+  width: 23px;
+  height: 20px;
+  float: right;
+  display: block;
+  margin-top: -60px;
+  transition: 0.1s;
+}
+.footer .col-10 .c.complex .ddl:hover:after {
+  transform: rotate(180deg);
+}
+.footer .col-10 .c.complex .ddl span {
+  color: #676767;
+}
+.footer .col-10 .c.complex .ddl .row {
+  height: 20px;
+  line-height: 20px;
+}
+.footer .col-10 .c.complex .ddl .row .title {
+  font-weight: bold;
+  padding: 0 5px;
 }
 .footer .col-10 .c1 {
   width: 9%;
@@ -359,16 +394,21 @@
   top: auto;
   bottom: 0px;
   width: 100%;
+  min-width: 400px;
   height: 55px;
 }
 .barmenu ul {
-  display: inline-block;
-  width: auto;
+  display: block;
+  width: 100%;
 }
 .barmenu ul li {
   display: inline-block;
-  padding: 5px;
+  padding: 5px 0;
+  width: 13%;
   border-width: 0px;
+}
+.barmenu ul li span {
+  font-size: 5pt;
 }
 
 .content {
@@ -394,7 +434,7 @@
 }
 
 /* Larger than phablet */
-@media (min-width: 550px) {
+@media only screen and (min-width: 30em) {
   .header .rootMenu {
     height: 80px;
     margin-left: 0px;
@@ -445,13 +485,23 @@
     display: inline-block;
     color: #3a61ae;
     transition: 0.8s;
-    padding: 0 20px;
+    padding: 0 3px;
+  }
+  .header .rootMenu ul.menu > li ul li:hover {
+    padding: 0 10px;
   }
   .header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
     display: block;
   }
   .header .rootMenu ul.menu > li:hover ul {
     z-index: 100;
+  }
+
+  .barmenu {
+    min-width: 60px;
+  }
+  .barmenu ul li span {
+    font-size: 7pt;
   }
 
   .footer {
@@ -473,7 +523,7 @@
   }
 }
 /* Larger than tablet */
-@media (min-width: 750px) {
+@media only screen and (min-width: 48.063em) {
   .header {
     position: fixed;
     height: 40px;
@@ -502,6 +552,9 @@
   }
   .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
     padding: 0 10px;
+  }
+  .header .rootMenu ul.menu > li ul li {
+    padding: 0 20px;
   }
   .header .rootMenu .rightNav {
     top: 0;
@@ -545,7 +598,8 @@
   }
   .barmenu ul li {
     display: block;
-    padding: 10px 0;
+    padding: 5px 0 4px;
+    width: auto;
     border-width: 1px;
   }
 
@@ -555,7 +609,7 @@
   }
 }
 /* Larger than desktop */
-@media (min-width: 1000px) {
+@media only screen and (min-width: 64.063em) {
   .header .rootMenu ul.menu > li {
     padding: 0 30px;
   }
@@ -586,7 +640,6 @@
     width: 19%;
   }
 }
-
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -663,36 +716,51 @@
 <div class="footer">
   <div class="col-10">
     <div class="c c1">
-      <h2>header 1</h2>content
-      content 2
-      content 3
+      <h2>Home Packages</h2>X1 Combo HD <br>
+      FastNet <br>
+      HomeCable <br>
+      Selection Pack <br>
+      Add On Pack <br>
     </div>
     <div class="c c1">
-      <h2>header 2</h2>content
-      content 2
-      content 3
+      <h2>Enterprise Packages </h2>Datacomm <br>
+      Media Advertising <br>
+      Small Medium Business <br>
     </div>
     <div class="c c1">
-      <h2>header 3</h2>content
-      content 2
+      <h2>First Media</h2>About Us <br>
+      Legal Disclaimer <br>
+      Privacy Policy <br>
+      Usage Policy <br>
+      Career <br>
+      Investor Relation <br>
     </div>
     <div class="c c1">
-      <h2>header 4</h2>content
-      content 2
+      <h2>Other Sites</h2>go.firstmedia.com <br>
+      my.firstmedia.com <br>
+      billing.firstmedia.com <br>
     </div>
-    <div class="c c2 blank"> -</div>
-    <div class="c c2 complex"><img class="icon"/>
-      <div class="forms">
-        normal <br/> <h2>Bold</h2>
-        normal paragraft
-        <input type="text" class="textbox"/>
+    <div class="c c2 blank"><span></span></div>
+    <div class="c c2 complex"><img src="http://sanada000.github.io/my.FM/images/ic_user_b.png" class="icon"/>
+      <div class="forms">FIRST MEDIA <br/>
+        <h2>SALES CENTER</h2>Want to have First Media in your home? <br>
+        Ask us for more detail. <br>
+        <div class="ddl">
+          <div class="row"><span class="title">Jakarta</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Surabaya</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Bandung</span><span class="telp">(021)2995-6000</span></div>
+        </div>
       </div>
     </div>
-    <div class="c c2 complex"><img class="icon"/>
-      <div class="forms">
-        normal <br/> <h2>Bold</h2>
-        normal paragraft
-        <input type="text" class="textbox"/>
+    <div class="c c2 complex"><img src="http://sanada000.github.io/my.FM/images/ic_24h.png" class="icon"/>
+      <div class="forms">FIRST MEDIA <br/>
+        <h2>CONTACT CENTER</h2>Have any problems or question for us? <br>
+        Dont' heistate to call us. <br>
+        <div class="ddl">
+          <div class="row"><span class="title">Jakarta</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Surabaya</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Bandung</span><span class="telp">(021)2995-6000</span></div>
+        </div>
       </div>
     </div>
     <div class="clear"></div>
