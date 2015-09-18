@@ -432,6 +432,24 @@
   width: 90%;
   padding: 0 4.999%;
 }
+.footer .col-10.socmed .icon {
+  background: url("http://sanada000.github.io/my.FM/images/socmed_slide.png");
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+}
+.footer .col-10.socmed .icon.fb {
+  background-position: 2px 1px;
+}
+.footer .col-10.socmed .icon.youtube {
+  background-position: 31px 1px;
+}
+.footer .col-10.socmed .icon.twitter {
+  background-position: 96px 1px;
+}
+.footer .col-10.socmed .icon.google {
+  background-position: 62px 1px;
+}
 
 /* Larger than phablet */
 @media only screen and (min-width: 30em) {
@@ -505,7 +523,7 @@
   }
 
   .footer {
-    margin-bottom: 0;
+    margin-bottom: 50px;
   }
   .footer .col-10 {
     width: 80%;
@@ -606,6 +624,10 @@
   .content {
     max-width: 960px;
     margin-top: 80px;
+  }
+
+  .footer {
+    margin-bottom: 0;
   }
 }
 /* Larger than desktop */
@@ -765,7 +787,12 @@
     </div>
     <div class="clear"></div>
   </div>
-  <div class="col-10 socmed"> <img class="icon"/><img class="icon"/><img class="icon"/></div>
+  <div class="col-10 socmed"> 
+    <div class="icon fb"></div>
+    <div class="icon twitter"></div>
+    <div class="icon google"></div>
+    <div class="icon youtube"></div>
+  </div>
   <div class="clear"></div>
 </div>
 </body>
