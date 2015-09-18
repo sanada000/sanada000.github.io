@@ -1,0 +1,1076 @@
+<!DOCTYPE HTML>
+<html>
+<head><title>Mockup 1 v0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
+* {
+  vertical-align: baseline;
+  font-weight: inherit;
+  font-family: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  border: 0 none;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+}
+
+b {
+  font-weight: bold;
+}
+
+.header {
+  font-family: 'Open Sans', sans-serif;
+  position: fixed;
+  height: 40px;
+  width: 100%;
+  min-width: 320px;
+  background: #fff;
+  top: 0px;
+  left: 0px;
+  border-bottom: 1px solid #777;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+  transition: 0.5s;
+  overflow: hidden;
+}
+.header.L, .header:hover {
+  height: 80px;
+}
+.header.L .logo, .header:hover .logo {
+  height: 80px;
+  background-size: 100%;
+}
+.header .logo {
+  background: url("http://sanada000.github.io/my.FM/images/logo_FM.png") 50% 75% no-repeat;
+  background-size: 50%;
+  background-color: rgba(255, 0, 0, 0);
+  height: 40px;
+  float: left;
+  width: 120px;
+  display: block;
+  text-align: center;
+  border-right: 1px solid #777;
+  transition: 0.5s;
+}
+.header .rootMenu {
+  position: relative;
+  background: #448;
+  background: linear-gradient(#3b60ae 60%, #304f8f);
+  height: 40px;
+  display: block;
+  margin-left: 120px;
+}
+.header .rootMenu ul {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.header .rootMenu ul li {
+  display: inline-block;
+  line-height: 40px;
+  color: #fff;
+}
+.header .rootMenu ul.menu > li {
+  padding: 0 20px;
+  font-weight: bold;
+  border-right: solid 1px #66A;
+  height: 40px;
+}
+.header .rootMenu ul.menu > li:last-child {
+  border-right: none;
+}
+.header .rootMenu ul.menu > li:after {
+  content: " ";
+  display: block;
+  background: #fff;
+  width: 10px;
+  height: 10px;
+  margin: 5px auto;
+  transition: 0.3s;
+  transform: rotate(45deg);
+}
+.header .rootMenu ul.menu > li:hover:after, .header .rootMenu ul.menu > li.active:after {
+  margin-top: -5px;
+}
+.header .rootMenu ul.menu > li ul {
+  position: absolute;
+  display: none;
+  z-index: 0;
+  background: #fff;
+  width: 1000px;
+  left: 0px;
+  top: 40px;
+}
+.header .rootMenu ul.menu > li ul li {
+  display: inline-block;
+  color: #3a61ae;
+  transition: 0.8s;
+  padding: 0 20px;
+}
+.header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
+  display: block;
+}
+.header .rootMenu ul.menu > li:hover ul {
+  z-index: 100;
+}
+.header .rootMenu .rightNav {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  background: rgba(255, 0, 0, 0);
+  height: 40px;
+}
+.header .rootMenu .rightNav ul {
+  height: 20px;
+  margin: 10px 0;
+}
+.header .rootMenu .rightNav ul li {
+  height: 20px;
+  line-height: 20px;
+  padding: 0 10px 0;
+  border-right: dotted 2px rgba(255, 255, 255, 0.4);
+}
+.header .rootMenu .rightNav ul li:last-child {
+  border-right: none;
+}
+.header .rootMenu .rightNav ul li a {
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  line-height: 12px;
+  color: #aaa;
+}
+.header .rootMenu .rightNav ul li a.active {
+  font-weight: bold;
+  color: #fff;
+}
+.header .rootMenu .rightNav ul li img.icon {
+  display: inline-block;
+  float: right;
+  border: none;
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 10px;
+}
+.header .rootMenu .rightNav ul li img.icon.left {
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+.barmenu {
+  position: fixed;
+  z-index: 1000;
+  right: 0px;
+  top: 40px;
+  width: 60px;
+  background: #3b60ae;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+}
+.barmenu ul {
+  display: block;
+  width: 60px;
+  padding: 0;
+  margin: 0;
+}
+.barmenu ul li {
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid #6c94eb;
+}
+.barmenu ul li img.icon {
+  display: block;
+  border: none;
+  width: 30px;
+  height: 30px;
+  margin: 0px auto;
+}
+.barmenu ul li:hover {
+  background: #6c94eb;
+}
+.barmenu ul li span {
+  text-align: center;
+  margin-top: 0px;
+  display: block;
+  width: 100%;
+  line-height: 14px;
+  font-size: 7pt;
+}
+
+.content {
+  display: block;
+  width: 960px;
+  background: #ccc;
+  margin: 80px auto 0;
+  padding: 5px 20px 20px;
+  font-family: 'Open Sans', sans-serif;
+}
+.content .top-menu {
+  width: 100%;
+  height: 80px;
+  background-color: rgba(255, 0, 0, 0);
+  display: block;
+  color: #375ba5;
+  font-size: 10pt;
+}
+.content .top-menu .float-left {
+  margin-left: 200px;
+  display: block;
+  background: rgba(255, 0, 0, 0);
+  float: right;
+}
+.content .top-menu .float-left span {
+  padding: 0 10px;
+}
+.content .top-menu ul {
+  display: inline-block;
+}
+.content .top-menu ul li {
+  font-size: 11pt;
+  list-style: none;
+  display: inline;
+  padding: 0 5px;
+  font-weight: bold;
+  transition: 0.5s;
+}
+.content .top-menu ul li.title {
+  font-weight: normal;
+  font-size: 36pt;
+}
+.content .top-menu ul li:hover {
+  font-size: 12pt;
+  padding: 0 10px;
+}
+.content .top-menu ul li.title:hover {
+  font-size: 36pt;
+  padding: 0 5px;
+}
+.content .top-menu ul li.ddl:after {
+  content: " ";
+  display: inline-block;
+  background: url("http://sanada000.github.io/my.FM/images/ic_down_s.png");
+  background-size: 10px 10px;
+  margin-left: 5px;
+  height: 10px;
+  width: 10px;
+}
+.content .top-menu img.pp {
+  width: 90px;
+  height: 90px;
+  float: right;
+  margin-right: 20px;
+  margin-top: 10px;
+  border-radius: 90px;
+}
+.content .page {
+  display: block;
+  margin-top: 10px;
+  color: #676767;
+  font-size: 12pt;
+  background: #fff url("http://sanada000.github.io/my.FM/images/bg_page1.png") no-repeat;
+  background-size: 960px;
+  padding: 35px 10px 10px 30px;
+}
+.content .page .separator {
+  display: block;
+  height: 30px;
+  width: 100%;
+  margin: 10px 0 -20px;
+  background: url("http://sanada000.github.io/my.FM/images/separator.png") 50% 75% no-repeat;
+  background-size: 960px;
+}
+.content .page h1 {
+  font-size: 18pt;
+}
+.content .page h1 b {
+  font-size: 32pt;
+}
+.content .page a.button {
+  background-color: #262261;
+  padding: 10px 15px;
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 11pt;
+  color: #fff;
+  display: inline-block;
+}
+.content .page a.button:hover {
+  background-color: #312c77;
+}
+.content .page table {
+  border: 1px solid #fff;
+  font-size: 10pt;
+}
+.content .page table td, .content .page table th {
+  padding: 10px;
+  background-color: #dddcdc;
+}
+.content .page table td a.button, .content .page table th a.button {
+  font-size: 10pt;
+  padding: 5px 10px;
+  margin: 0;
+}
+.content .page table th {
+  background-color: #6b95eb;
+  font-weight: bold;
+  color: #fff;
+}
+.content .ads {
+  display: block;
+  margin-top: 0px;
+  padding: 30px 20px;
+  color: #fff;
+  font-size: 12pt;
+  height: 40px;
+  background: #fff url("http://sanada000.github.io/my.FM/images/ads.png") no-repeat;
+  background-size: 960px;
+}
+
+.clear {
+  clear: both;
+}
+
+.footer {
+  display: block;
+  margin-top: 20px;
+  width: 100%;
+  min-width: 980px;
+  background: #3b60ae;
+  padding: 10px 0;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+}
+.footer h2 {
+  font-size: 12pt;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.footer .col-10 {
+  width: 1024px;
+  margin: 0 auto;
+  display: block;
+}
+.footer .col-10 img.icon {
+  display: block;
+  border: none;
+  width: 35px;
+  height: 35px;
+  margin-right: 5px;
+  float: left;
+}
+.footer .col-10 .c {
+  margin-bottom: 10px;
+  background-color: rgba(255, 0, 0, 0);
+  float: left;
+  display: inline-block;
+}
+.footer .col-10 .c.complex {
+  overflow: hidden;
+}
+.footer .col-10 .c.complex img.icon {
+  margin-top: 10px;
+  margin-bottom: -40px;
+}
+.footer .col-10 .c.complex .forms {
+  display: block;
+  float: left;
+  margin-left: 40px;
+}
+.footer .col-10 .c.complex .ddl {
+  display: block;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 8pt;
+  height: 20px;
+  margin-bottom: 40px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.footer .col-10 .c.complex .ddl:hover {
+  height: 60px;
+  margin-bottom: 0px;
+}
+.footer .col-10 .c.complex .ddl:after {
+  content: " ";
+  background: url("http://sanada000.github.io/my.FM/images/ic_down.png");
+  width: 23px;
+  height: 20px;
+  float: right;
+  display: block;
+  margin-top: -60px;
+  transition: 0.1s;
+}
+.footer .col-10 .c.complex .ddl:hover:after {
+  transform: rotate(180deg);
+}
+.footer .col-10 .c.complex .ddl span {
+  color: #676767;
+}
+.footer .col-10 .c.complex .ddl .row {
+  height: 20px;
+  line-height: 20px;
+}
+.footer .col-10 .c.complex .ddl .row .title {
+  font-weight: bold;
+  padding: 0 5px;
+}
+.footer .col-10 .c1 {
+  width: 9%;
+  padding: 0 0.49%;
+}
+.footer .col-10 .c2 {
+  width: 19%;
+  padding: 0 0.4999%;
+}
+
+/** set To Smaller first **/
+@media only screen and (min-width: 1em) {
+  .header {
+    width: 100%;
+    position: static;
+    height: auto;
+  }
+  .header.L, .header:hover {
+    height: auto;
+  }
+  .header img.logo {
+    height: 80px;
+    float: none;
+    border-width: 0px;
+  }
+  .header .rootMenu {
+    margin-left: 0px;
+    height: auto;
+  }
+  .header .rootMenu ul {
+    display: block;
+  }
+  .header .rootMenu ul li {
+    display: block;
+    border-bottom: 1px solid #fff;
+  }
+  .header .rootMenu ul li:last-child {
+    border-bottom: none;
+  }
+  .header .rootMenu ul.menu > li {
+    border-right: none;
+    height: auto;
+    padding-left: 10px;
+    width: 100%;
+    transition: 0.5s;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding-left: 15px;
+  }
+  .header .rootMenu ul.menu > li:after {
+    display: none;
+  }
+  .header .rootMenu ul.menu > li ul {
+    position: static;
+    width: 100%;
+    background-color: #3a61ae;
+    height: 0px;
+  }
+  .header .rootMenu ul.menu > li ul li {
+    display: block;
+    color: #fff;
+    border-color: #aaf;
+  }
+  .header .rootMenu ul.menu > li ul li:hover {
+    background-color: #3a61ae;
+    color: #fff;
+  }
+  .header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
+    display: block;
+    height: auto;
+  }
+  .header .rootMenu ul.menu > li:hover ul {
+    z-index: 100;
+  }
+  .header .rootMenu .rightNav {
+    top: -80px;
+    height: auto;
+  }
+  .header .rootMenu .rightNav ul {
+    height: auto;
+    margin: 0px;
+  }
+  .header .rootMenu .rightNav ul li {
+    padding: 5px 5px 0;
+    text-align: right;
+    border-right: none;
+    color: #304f8f;
+  }
+  .header .rootMenu .rightNav ul li img.icon {
+    margin-top: -4px;
+  }
+  .header .rootMenu .rightNav ul li img.icon.left {
+    float: right;
+    margin: 0 0 0 10px;
+  }
+  .header .rootMenu .rightNav ul li a.active {
+    color: #304f8f;
+  }
+
+  .barmenu {
+    top: auto;
+    bottom: 0px;
+    width: 100%;
+    min-width: 400px;
+    height: 55px;
+  }
+  .barmenu ul {
+    display: block;
+    width: 100%;
+  }
+  .barmenu ul li {
+    display: inline-block;
+    padding: 5px 0;
+    width: 13%;
+    border-width: 0px;
+  }
+  .barmenu ul li span {
+    font-size: 5pt;
+  }
+
+  .content {
+    width: 80%;
+    margin-top: 0px;
+  }
+  .content .top-menu .float-left {
+    display: inline-block;
+    margin: 0;
+  }
+  .content .top-menu ul {
+    width: 100%;
+  }
+  .content .top-menu ul li {
+    display: block;
+    padding: 10px;
+    background: #fff;
+    border-bottom: 1px solid #6b95eb;
+  }
+  .content .top-menu ul li.title {
+    background: transparent;
+    padding: 0 5px;
+  }
+  .content .top-menu ul li:hover {
+    font-size: 11pt;
+    padding: 10px 0px 10px 20px;
+    background: #dfdfdf;
+  }
+  .content .top-menu img.pp {
+    margin-bottom: -60px;
+  }
+  .content .jaga {
+    width: 100%;
+    overflow: auto;
+  }
+
+  .footer {
+    min-width: 320px;
+    margin-bottom: 50px;
+  }
+  .footer .col-10 {
+    width: 90%;
+    min-width: 320px;
+  }
+  .footer .col-10 .c1 {
+    width: 40%;
+    padding: 0 4.99%;
+  }
+  .footer .col-10 .c2 {
+    width: 90%;
+    padding: 0 4.999%;
+  }
+  .footer .col-10.socmed .icon {
+    background: url("http://sanada000.github.io/my.FM/images/socmed_slide.png");
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+  }
+  .footer .col-10.socmed .icon.fb {
+    background-position: 2px 1px;
+  }
+  .footer .col-10.socmed .icon.youtube {
+    background-position: 31px 1px;
+  }
+  .footer .col-10.socmed .icon.twitter {
+    background-position: 96px 1px;
+  }
+  .footer .col-10.socmed .icon.google {
+    background-position: 62px 1px;
+  }
+}
+/* Larger than phablet */
+@media only screen and (min-width: 30em) {
+  .header .rootMenu {
+    height: 80px;
+    margin-left: 0px;
+  }
+  .header .rootMenu ul {
+    display: inline-block;
+    border-bottom: none;
+  }
+  .header .rootMenu ul.menu > li {
+    display: inline-block;
+    border-bottom: none;
+    padding: 0 30px;
+    font-weight: bold;
+    border-right: solid 1px #6b95eb;
+    height: 40px;
+    width: auto;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 30px;
+    background: transparent;
+  }
+  .header .rootMenu ul.menu > li:last-child {
+    border-right: none;
+  }
+  .header .rootMenu ul.menu > li:after {
+    content: " ";
+    display: block;
+    background: #fff;
+    width: 10px;
+    height: 10px;
+    margin: 5px auto;
+    transition: 0.3s;
+    transform: rotate(45deg);
+  }
+  .header .rootMenu ul.menu > li:hover:after, .header .rootMenu ul.menu > li.active:after {
+    margin-top: -5px;
+  }
+  .header .rootMenu ul.menu > li ul {
+    position: absolute;
+    display: none;
+    z-index: 0;
+    background: #fff;
+    width: 1000px;
+    left: 0px;
+    top: 40px;
+  }
+  .header .rootMenu ul.menu > li ul li {
+    display: inline-block;
+    color: #3a61ae;
+    transition: 0.8s;
+    padding: 0 3px;
+  }
+  .header .rootMenu ul.menu > li ul li:hover {
+    padding: 0 10px;
+  }
+  .header .rootMenu ul.menu > li:hover ul, .header .rootMenu ul.menu > li.active ul {
+    display: block;
+  }
+  .header .rootMenu ul.menu > li:hover ul {
+    z-index: 100;
+  }
+
+  .barmenu {
+    min-width: 60px;
+  }
+  .barmenu ul li span {
+    font-size: 7pt;
+  }
+
+  .footer {
+    margin-bottom: 50px;
+  }
+  .footer .col-10 {
+    width: 80%;
+  }
+  .footer .col-10 .c1 {
+    width: 24%;
+    padding: 0 0.49%;
+  }
+  .footer .col-10 .c2 {
+    width: 49%;
+    padding: 0 0.4999%;
+  }
+  .footer .col-10 .c2.blank {
+    width: 99%;
+  }
+}
+/* Larger than tablet */
+@media only screen and (min-width: 48.063em) {
+  .header {
+    position: fixed;
+    height: 40px;
+  }
+  .header.L, .header:hover {
+    height: 80px;
+  }
+  .header.L .logo, .header:hover .logo {
+    height: 80px;
+  }
+  .header img.logo {
+    height: 40px;
+    border-width: 1px;
+    float: left;
+  }
+  .header .rootMenu {
+    height: 40px;
+    margin-left: 120px;
+  }
+  .header .rootMenu ul li {
+    display: inline-block;
+    border-bottom: none;
+  }
+  .header .rootMenu ul.menu > li {
+    padding: 0 10px;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 10px;
+  }
+  .header .rootMenu ul.menu > li ul li {
+    padding: 0 20px;
+  }
+  .header .rootMenu .rightNav {
+    top: 0;
+    height: 40px;
+  }
+  .header .rootMenu .rightNav ul {
+    height: 20px;
+    margin: 10px 0;
+  }
+  .header .rootMenu .rightNav ul li {
+    padding: 0 10px 0;
+    border-right: dotted 2px rgba(255, 255, 255, 0.4);
+    text-align: left;
+    color: #fff;
+  }
+  .header .rootMenu .rightNav ul li:last-child {
+    border-right: none;
+  }
+  .header .rootMenu .rightNav ul li img.icon {
+    margin: 0 0 0 10px;
+  }
+  .header .rootMenu .rightNav ul li img.icon.left {
+    float: left;
+    margin: 0 10px 0 0;
+  }
+  .header .rootMenu .rightNav ul li a {
+    color: #aaa;
+  }
+  .header .rootMenu .rightNav ul li a.active {
+    color: #fff;
+  }
+
+  .barmenu {
+    top: 40px;
+    width: 60px;
+    height: 100%;
+  }
+  .barmenu ul {
+    display: block;
+    width: 60px;
+  }
+  .barmenu ul li {
+    display: block;
+    padding: 5px 0 4px;
+    width: auto;
+    border-width: 1px;
+  }
+
+  .content {
+    max-width: 960px;
+    margin-top: 80px;
+  }
+  .content .top-menu .float-left {
+    margin-left: 200px;
+    display: block;
+  }
+  .content .top-menu ul {
+    width: auto;
+  }
+  .content .top-menu ul li {
+    display: inline;
+    padding: 0 5px;
+    background: transparent;
+    border-bottom: none;
+  }
+  .content .top-menu ul li:hover {
+    font-size: 12pt;
+    padding: 0 10px;
+    background: transparent;
+  }
+
+  .footer {
+    margin-bottom: 0;
+  }
+}
+/* Larger than desktop */
+@media only screen and (min-width: 64.063em) {
+  .header .rootMenu ul.menu > li {
+    padding: 0 30px;
+  }
+  .header .rootMenu ul.menu > li:hover, .header .rootMenu ul.menu > li.active {
+    padding: 0 30px;
+  }
+
+  .footer {
+    margin-bottom: 0;
+    font-size: 9pt;
+  }
+  .footer h2 {
+    font-size: 10pt;
+  }
+  .footer .col-10 {
+    width: 90%;
+    max-width: 1024px;
+  }
+  .footer .col-10 .c1 {
+    width: 9%;
+    padding: 0 0.49%;
+  }
+  .footer .col-10 .c2 {
+    width: 19%;
+    padding: 0 0.4999%;
+  }
+  .footer .col-10 .c2.blank {
+    width: 19%;
+  }
+}
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+ $(window).scroll(function (event) {
+        var sc = $(window).scrollTop();
+        if (sc < 40)
+          $(".header").addClass("L");
+        else
+          $(".header").removeClass("L");
+        
+});
+</script>
+</head>
+<body>
+
+<div class="header L"><img class="logo"/>
+  <div class="rootMenu">
+    <ul class="menu">
+      <li class="active">HOME
+        <ul>
+          <li>Packages</li>
+          <li>Fastnet</li>
+          <li>HomeCable HD</li>
+          <li>FM GO</li>
+          <li>What's On</li>
+        </ul>
+      </li>
+      <li>ENTERPRISE
+        <ul>
+          <li>Help</li>
+          <li>Test</li>
+        </ul>
+      </li>
+      <li>CORPORATE
+        <ul>
+          <li>HomeCable HD</li>
+          <li>FM GO</li>
+          <li>What's On</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="rightNav">
+      <ul>
+        <li><span>My First Media<img src="http://sanada000.github.io/my.FM/images/ic_user_s.png" class="icon"/></span></li>
+        <li><span>Jakarta<img src="http://sanada000.github.io/my.FM/images/ic_loc_s.png" class="icon"/></span></li>
+        <li><span><img src="http://sanada000.github.io/my.FM/images/ic_balon_s.png" class="icon left"/><a class="active">EN</a><a>  |   </a><a>ID</a></span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="barmenu">
+  <ul>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_search.png" class="icon"/></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_plus.png" class="icon"/><span>SUBSCRIBE</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_wired.png" class="icon"/><span>UPGRADE</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_FMGO.png" class="icon"/><span>FM GO</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_user.png" class="icon"/><span>MY FM</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_headset.png" class="icon"/><span>SUPPORT</span></li>
+    <li><img src="http://sanada000.github.io/my.FM/images/ic_mail.png" class="icon"/><span>CONTACT US</span></li>
+  </ul>
+</div>
+<div class="content">
+  <div class="top-menu">
+    <div class="float-left"><span>WELCOME, <b>IT ROOM</b></span><span><b>LOGOUT</b></span></div>
+    <ul>
+      <li class="title">my<b>FM</b></li>
+      <li>HOME</li>
+      <li>ACCOUNTS</li>
+      <li>BILLING PAYMENTS</li>
+      <li class="ddl">PROFILE</li>
+      <li class="ddl">REPORT       </li>
+    </ul><img src="http://sanada000.github.io/my.FM/images/user_photo.png" class="pp"/>
+  </div>
+  <div class="clear"></div>
+  <div class="page">
+    <h1>myFM > <b>ACCOUNTS</b></h1>Suggestion Accounts <br /><a class="button">ADD OTHER ACCOUNT</a>
+    <div class="jaga">
+      <table style="width:600px;">
+        <tr>
+          <th>NO.</th>
+          <th>BILLER</th>
+          <th>ACCOUNT NO.</th>
+          <th>ACCOUNT NAME</th>
+          <th>REGISTER</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>FIRST MEDIA</td>
+          <td>10096501</td>
+          <td>Assegaf</td>
+          <td> 
+            <center>
+              <input type="checkbox"/>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>FIRST MEDIA</td>
+          <td>56755801</td>
+          <td>Yanti</td>
+          <td> 
+            <center>
+              <input type="checkbox"/>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>FIRST MEDIA</td>
+          <td>33747501</td>
+          <td>Kelvin</td>
+          <td> 
+            <center>
+              <input type="checkbox"/>
+            </center>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+    <div class="separator"> </div>My Accounts
+    <div class="jaga">
+      <table style="width:600px;">
+        <tr>
+          <th>NO.</th>
+          <th>BILLER</th>
+          <th>ACCOUNT NO.</th>
+          <th> </th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>BIG TV</td>
+          <td>&nbsp;</td>
+          <td> <a class="button">UNLINK</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>BIG TV</td>
+          <td>&nbsp;</td>
+          <td> <a class="button">UNLINK</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>BIG TV</td>
+          <td>&nbsp;</td>
+          <td> <a class="button">UNLINK</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="ads">Advertise</div>
+</div>
+<div class="footer">
+  <div class="col-10">
+    <div class="c c1">
+      <h2>Home Packages</h2>X1 Combo HD <br>
+      FastNet <br>
+      HomeCable <br>
+      Selection Pack <br>
+      Add On Pack <br>
+    </div>
+    <div class="c c1">
+      <h2>Enterprise Packages </h2>Datacomm <br>
+      Media Advertising <br>
+      Small Medium Business <br>
+    </div>
+    <div class="c c1">
+      <h2>First Media</h2>About Us <br>
+      Legal Disclaimer <br>
+      Privacy Policy <br>
+      Usage Policy <br>
+      Career <br>
+      Investor Relation <br>
+    </div>
+    <div class="c c1">
+      <h2>Other Sites</h2>go.firstmedia.com <br>
+      my.firstmedia.com <br>
+      billing.firstmedia.com <br>
+    </div>
+    <div class="c c2 blank"><span></span></div>
+    <div class="c c2 complex"><img src="http://sanada000.github.io/my.FM/images/ic_user_b.png" class="icon"/>
+      <div class="forms">FIRST MEDIA <br/>
+        <h2>SALES CENTER</h2>Want to have First Media in your home? <br>
+        Ask us for more detail. <br>
+        <div class="ddl">
+          <div class="row"><span class="title">Jakarta</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Surabaya</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Bandung</span><span class="telp">(021)2995-6000</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="c c2 complex"><img src="http://sanada000.github.io/my.FM/images/ic_24h.png" class="icon"/>
+      <div class="forms">FIRST MEDIA <br/>
+        <h2>CONTACT CENTER</h2>Have any problems or question for us? <br>
+        Dont' heistate to call us. <br>
+        <div class="ddl">
+          <div class="row"><span class="title">Jakarta</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Surabaya</span><span class="telp">(021)2995-6000</span></div>
+          <div class="row"><span class="title">Bandung</span><span class="telp">(021)2995-6000</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="col-10 socmed"> 
+    <div class="icon fb"></div>
+    <div class="icon twitter"></div>
+    <div class="icon google"></div>
+    <div class="icon youtube"></div>
+  </div>
+  <div class="clear"></div>
+</div>
+</body>
+</html>
