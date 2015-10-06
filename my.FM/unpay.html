@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head><title>Unpay Notif</title>
+</head>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
+* {
+  vertical-align: baseline;
+  font-weight: inherit;
+  font-family: 'Open Sans', sans-serif;
+  font-style: inherit;
+  font-size: 100%;
+  border: 0 none;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+}
+
+b {
+  font-weight: bold;
+}
+
+.page {
+  border: 0px solid #900;
+  background-color: #0061aa;
+  padding: 0;
+  display: block;
+  width: 760px;
+  margin: 0 auto;
+}
+.page .content {
+  display: block;
+  color: #fff;
+}
+.page .content p {
+  margin: 20px 0;
+  text-align: left;
+  font-size: 12pt;
+}
+.page .content h2 {
+  font-size: 16pt;
+}
+.page .content small {
+  font-size: 10pt;
+}
+
+.footer {
+  color: #fff;
+  background-color: #0a70b8;
+  background: #0a70b8;
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #0a70b8 0%, #27a2db 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #0a70b8), color-stop(100%, #27a2db));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, #0a70b8 0%, #27a2db 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, #0a70b8 0%, #27a2db 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, #0a70b8 0%, #27a2db 100%);
+  /* IE10+ */
+  background: linear-gradient(to right, #0a70b8 0%, #27a2db 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a70b8', endColorstr='#27a2db',GradientType=1 );
+}
+.footer .ic {
+  display: inline-block;
+  margin-right: 3px;
+}
+.footer .ic img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  margin-right: 3px;
+}
+.footer .left {
+  font-size: 7pt;
+  display: block;
+  float: left;
+  margin-top: 9px;
+}
+.footer .left .ic {
+  line-height: 18px;
+}
+.footer .right {
+  font-size: 7pt;
+  display: block;
+  float: right;
+}
+.footer .right .ic {
+  width: 110px;
+  line-height: 12px;
+}
+.footer .right .ic img {
+  width: 40px;
+  height: 40px;
+  margin-top: -2px;
+}
+
+.clear {
+  clear: both;
+  display: block;
+}
+
+.pad {
+  padding: 10px;
+}
+
+
+</style>
+<body>
+
+<div class="page">
+  <div class="header"><img src="http://soap.firstmedia.com/images/unpay/header.jpg" width="760 px"/></div>
+  <div class="content pad">
+    <p>
+      <b>Pelanggan Terhormat,</b> <br/>
+      Nama : <span class="ganti">XXXX</span> <br />
+      Alamat : <span class="ganti2">XXX XXXXX XXXXX </span><br />
+      Nomor Pelanggan : <span class="ganti3">99999999</span>
+    </p>
+    <p>Terima kasih atas kepercayaan Bapak/Ibu telah memilih First Media sebagai sarana informasi dan hiburan.</p>
+    <P>
+      Kami informasikan tagihan Anda telah lewat jatuh tempo, untuk menghindari penghentian layanan, mohon segera melakukan pembayaran tagihan anda sebesar Rp. <span class="ganti4">xxx.xxxx</span>. Mohon abaikan pesan ini, jika pembayaran telah dilakukan. <br />
+      Terima kasih atas perhatian Bapak/Ibu.
+    </P>
+    <center style="margin-top:20px;">
+      <h2>Untuk keterangan lebih lanjut, hubungi <b>1500-595</b>.</h2><small>(Penghentian layanan tidak menghilangkan kewajiban Pelanggan untuk melunasi tagihan.)</small>
+    </center>
+  </div>
+  <div class="footer pad">
+    <div class="left"><a class="ic"><img src="http://soap.firstmedia.com/images/unpay/ic1.png"/><b>firstmedia.com</b></a><a class="ic"><img src="http://soap.firstmedia.com/images/unpay/ic2.png"/>FirstMedia.IND</a><a class="ic"><img src="http://soap.firstmedia.com/images/unpay/ic3.png"/>@FirstMediaCares|@FirstMediaWorld</a></div>
+    <div class="right">
+      <div class="ic"> <img src="http://soap.firstmedia.com/images/unpay/ic4.png"/>STABLE<br>INTERNET<br>CONNECTION</div>
+      <div class="ic"> <img src="http://soap.firstmedia.com/images/unpay/ic5.png"/>WIRELESS<br>HOME<br>NETWORK</div>
+      <div class="ic"> <img src="http://soap.firstmedia.com/images/unpay/ic6.png"/>COMBO<br>VALUE<br>SAVINGS</div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+	$(".ganti").click(function() {
+		var n = prompt("Masukkan teks yang diinginkan", "XXX XXXXX");
+		$(".ganti").html(n);
+	});
+	$(".ganti2").click(function() {
+		var n = prompt("Masukkan teks yang diinginkan", "XXX XXXXX XXXXX");
+		$(".ganti2").html(n);
+	});
+	$(".ganti3").click(function() {
+		var n = prompt("Masukkan teks yang diinginkan", "99999999");
+		$(".ganti3").html(n);
+	});
+	$(".ganti4").click(function() {
+		var n = prompt("Masukkan teks yang diinginkan", "999,999");
+		$(".ganti4").html(n);
+	});
+</script>
+</html>
