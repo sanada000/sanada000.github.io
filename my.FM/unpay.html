@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <style>
+
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,700);
 * {
   vertical-align: baseline;
@@ -116,35 +117,95 @@ b {
 
 /** set To Smaller first **/
 @media only screen and (min-width: 1em) {
-  .footer {
+  .page {
+    position: relative;
+    overflow: hidden;
+  }
+  .page .logo {
+    transition: all 0.5s;
+    left: 0;
+    top: 0;
+    position: Absolute;
+    background-image: url("http://soap.firstmedia.com/images/unpay/logo.png");
+    width: 200px;
+    height: 150px;
+    background-size: 75%;
+    background-repeat: no-repeat;
+  }
+  .page .header img {
+    width: 160%;
+    margin-left: -30%;
+  }
+  .page .footer {
     text-align: center;
   }
-  .footer .left {
+  .page .footer.pad {
+    padding-bottom: 0px;
+  }
+  .page .footer .left {
     transition: all 0.5s;
     display: inline-block;
     float: none;
   }
-  .footer .left .ic {
+  .page .footer .left .ic {
+    font-size: 10pt;
     transition: all 0.5s;
     display: inline-block;
   }
-  .footer .right {
+  .page .footer .right {
     transition: all 0.5s;
     display: inline-block;
     float: none;
   }
-  .footer .right .ic {
+  .page .footer .right .ic {
+    font-size: 10pt;
+    width: 140px;
     transition: all 0.5s;
     text-align: left;
     margin: 5px 0;
   }
 }
+@media only screen and (min-width: 25em) {
+  .page .logo {
+    background-size: 85%;
+  }
+  .page .header img {
+    width: 120%;
+    margin-left: -10%;
+  }
+}
+@media only screen and (min-width: 30em) {
+  .page .logo {
+    width: 200px;
+    height: 150px;
+    background-size: 100%;
+  }
+  .page .header img {
+    width: 110%;
+    margin-left: -5%;
+  }
+}
 @media only screen and (min-width: 48em) {
-  .footer .left {
+  .page .logo {
+    display: none;
+  }
+  .page .header img {
+    width: 100%;
+    margin-left: 0;
+  }
+  .page .footer .left {
     float: left;
   }
-  .footer .right {
+  .page .footer .left .ic {
+    font-size: 7pt;
+  }
+  .page .footer .right {
     float: right;
+  }
+  .page .footer .right .ic {
+    font-size: 7pt;
+    width: 110px;
+    margin-bottom: 0;
   }
 }
 
@@ -154,7 +215,9 @@ b {
 
 
 <div class="page">
-  <div class="header"><img src="http://soap.firstmedia.com/images/unpay/header.jpg" width="760 px"/></div>
+  <div class="header"><img src="http://soap.firstmedia.com/images/unpay/header.jpg" width="760 px"/>
+    <div class="logo"></div>
+  </div>
   <div class="content pad">
     <p>
       <b>Pelanggan Terhormat,</b> <br/>
