@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>gmaps.js &mdash; the easiest way to use Google Maps</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <script src="gmaps.js"></script>
+  <script src="prettify.js"></script>
+  <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Convergence|Bitter|Droid+Sans|Ubuntu+Mono' />
+  <link rel="stylesheet" href="prettify.css" />
+  <link rel="stylesheet" href="map.css" />
+  <script>
+	  var la,lo;
+	  var sel, data;
+	  function getLocation() {
+		if (navigator.geolocation) {
+			position = navigator.geolocation.getCurrentPosition(isi);
+		} else {
+			x.innerHTML = "Geolocation is not supported by this browser.";
+		}
+	}	
+		//load data marker dari database ke sini
+		data= {"tempat":[{"id":"0","lat":-6.175147,"lng":106.827185,"nama":"Monas","rating":3,"icon":"ico1.png"},
+								{"id":"1","lat":-6.207623,"lng":106.610371,"nama":"Rumah Keren","rating":5,"icon":"ico1.png"}
+						]};
+	function isi(position) {
+		la = position.coords.latitude;
+		lo = position.coords.longitude;
+		 var markers_data = [];
+		 //siapkan marker
+		 for (var i = 0; i < data.tempat.length; i++) {
+			var item = data.tempat[i];
+			markers_data.push({
+				lat : item.lat,
+				lng : item.lng,
+				title : item.id,
+				animation: google.maps.Animation.DROP,
+				icon: {url: item.icon,
+					scaledSize: new google.maps.Size(48, 48)
+				},
+				click: function(e){
+					$("#floater").show();
+					map.setCenter(e.getPosition().lat(), e.getPosition().lng());
+					try {
+					sel.setAnimation(null);
+					}catch(e){
+					}
+					e.setAnimation(google.maps.Animation.BOUNCE);
+					$("#floater .title").html(data.tempat[e.title].nama);
+					
+					sel = e;
+				}
+				});
+		 }
+		 map = new GMaps({
+			div: '#map',
+			lat: la,
+			lng: lo
+		  });
+		map.setZoom(12);
+        map.addMarkers(markers_data);
+}
+    $(document).ready(function(){
+      prettyPrint();
+	  getLocation();     
+    });
+	function cari() {
+		//isi data pencarian disini
+		if ($("#kotakcari").val() == "contoh") 
+		data= {"tempat":[{"id":"0","lat":-6.175147,"lng":106.827185,"nama":"Monas","rating":3,"icon":"ico1.png"},
+								{"id":"1","lat":-6.207623,"lng":106.610371,"nama":"Rumah Keren","rating":5,"icon":"ico1.png"}
+						]};
+		else
+		data= {"tempat":[{"id":"0","lat":-6.175147,"lng":106.827185,"nama":"Sample 1","rating":3,"icon":"ico1.png"},
+								{"id":"1","lat":-6.227623,"lng":106.710371,"nama":"Sample 2","rating":5,"icon":"ico1.png"},
+								{"id":"2","lat":-6.157623,"lng":106.810371,"nama":"Sample 3","rating":4,"icon":"ico1.png"},
+								{"id":"3","lat":-6.217623,"lng":106.910371,"nama":"Sample 4","rating":2,"icon":"ico1.png"}
+						]};
+		
+		//cetak marker
+		 var markers_data = [];
+		 for (var i = 0; i < data.tempat.length; i++) {
+			var item = data.tempat[i];
+			markers_data.push({
+				lat : item.lat,
+				lng : item.lng,
+				title : item.id,
+				animation: google.maps.Animation.DROP,
+				icon: {url: item.icon,
+					scaledSize: new google.maps.Size(48, 48)
+				},
+				click: function(e){
+					$("#floater").show();
+					map.setCenter(e.getPosition().lat(), e.getPosition().lng());
+					try {
+					sel.setAnimation(null);
+					}catch(e){
+					}
+					e.setAnimation(google.maps.Animation.BOUNCE);
+					$("#floater .title").html(data.tempat[e.title].nama);
+					
+					sel = e;
+				}
+				});
+		 }
+		 //buang marker
+		 map.removeMarkers();
+		 //tambah marker baru
+        map.addMarkers(markers_data);
+		
+		}
+  </script>
+</head>
+<body>
+  <div id="body">
+  <div id="map" style="position:static; width:100%; height:1000px;">
+	</div>
+  <div id="floater" style="position:absolute; overflow-y:scroll; width:400px; height:600px; top:30px; left:40px;  background:#fff; ;">
+	<input type="text" id="kotakcari"style="width:100%" />
+	<input type="button" onClick="cari()" value="Cari" />
+	<h3 class="title"></h3>
+	
+  </div>
+</body>
+</html>
